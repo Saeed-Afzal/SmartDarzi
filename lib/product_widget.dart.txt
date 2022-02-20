@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+
+
+
+
+
+
+class ProductCard extends StatelessWidget {
+  // const ProductCard({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+       child: Column(
+          children: [
+            Container(
+              height: 220.0,
+              width: 160.0,
+              // color: Colors.blueAccent,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.black12,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(5.0),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey[100],
+                        blurRadius: 1.0,
+                        offset: Offset(1.0, 1.0))
+                  ]),
+
+              child: Column(
+                children: [
+                  Image.network(
+                      'https://image.made-in-china.com/202f0j00goKDLQIcYbqH/Spring-Autumn-Kids-Casual-Jacket-Girls-Kids-Denim-Jacket.jpg'),
+                  Text(
+                    "Kids Cloth",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xff707070),
+                    ),
+                  ),
+                  Text(
+                    "Rs: " + "550",
+                    style: TextStyle(
+                      fontFamily: 'Segoe UI',
+                      fontSize: 16,
+                      color: const Color(0xff006eb8),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+
+    );
+  }
+}
