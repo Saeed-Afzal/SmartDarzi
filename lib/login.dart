@@ -1,7 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_ecommerce_app/Utilities/constants.dart';
 import 'package:flutter_ecommerce_app/bottomAppBar.dart';
 import 'package:flutter_ecommerce_app/signup.dart';
+import 'package:flutter_ecommerce_app/widgets/emailWidget.dart';
+import 'package:flutter_ecommerce_app/widgets/passwordWidget.dart';
 import 'package:flutter_ecommerce_app/widgets/text_Fields.dart';
 
 class Login extends StatefulWidget {
@@ -11,6 +15,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool _isLoading = false;
+  bool _rememberMe = false;
 
   // const Login({Key? key}) : super(key: key);
   login(BuildContext context) async {
@@ -75,99 +80,117 @@ class _LoginState extends State<Login> {
   // TextEditingController CPassword = TextEditingController();
   GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
 
+Widget _buildForgotPasswordBtn() {
+    return Container(
+      alignment: Alignment.centerRight,
+      child: TextButton(
+        onPressed: () => print('Forgot Password Button Pressed'),
+        child: Text(
+          'Forgot Password?',
+          style: kLabelStyle,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRememberMeCheckbox() {
+    return SizedBox(
+      height: 20.0,
+      child: Row(
+        children: <Widget>[
+          Theme(
+            data: ThemeData(unselectedWidgetColor: Colors.white),
+            child: Checkbox(
+              value: _rememberMe,
+              checkColor: Colors.green,
+              activeColor: Colors.white,
+              onChanged: (value) {
+                setState(() {
+                  _rememberMe = value;
+                });
+              },
+            ),
+          ),
+          Text(
+            'Remember me',
+            style: kLabelStyle,
+          ),
+        ],
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 40),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+    return SafeArea(
+      minimum: const EdgeInsets.all(1.0),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.light,
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Stack(
+              children: <Widget>[
                 Container(
-                    child: Image.asset(
-                  'assets/logo.png',
-                )),
-                Text(
-                  'Login',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
+                  height: double.infinity,
+                  width: double.infinity,
+                  // margin: EdgeInsets.symmetric(horizontal: 40),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      colors: [
+                        Color(0xFF73AEF5),
+                        Color(0xFF61A4F1),
+                        Color(0xFF478DE0),
+                        Color(0xFF398AE5),
+                      ],
+                      // ignore: prefer_const_literals_to_create_immutables
+                      stops: [0.1, 0.4, 0.7, 0.9],
+                    ),
                   ),
                 ),
-                Column(
-                  children: [
-                    MyTextField(
-                      controller: EmailCont,
-                      obscureText: false,
-                      icon: Icons.email,
-                      hintText: 'Email',
-                    ),
-                    // textField(
-                    //     hintText: "Email",
-                    //     icon: Icons.person_outline,
-                    //     iconColor: Colors.blue),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    MyTextField(
-                      controller: PasswordCont,
-                      obscureText: true,
-                      icon: Icons.lock,
-                      hintText: 'Password',
-                    ),
-                  ],
-                ),
                 SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  height: 40,
-                  width: 160,
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(36.0),
-                                      side: BorderSide(color: Colors.red)))),
-                      onPressed: () {
-                        login(context);
-                      },
-                      child: _isLoading
-                          ? CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : Text('Login')),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "New User? ",
-                      style: TextStyle(color: Colors.grey),
+                  height: double.infinity,
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 40.0,
+                      vertical: 120.0,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => Signup()),
-                        );
-                      },
-                      child: Text(
-                        "Register Now ",
-                        style: TextStyle(color: Colors.red),
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Sign In',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'OpenSans',
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 30.0),
+                        EmailWidget(
+                          controller: EmailCont,
+                        ),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        PasswordWidget(
+                          controller: PasswordCont,
+                        ),
+                        _buildForgotPasswordBtn(),
+                         _buildRememberMeCheckbox(),
+                        // _buildLoginBtn(),
+                        // _buildSignInWithText(),
+                        // _buildSocialBtnRow(),
+                        // _buildSignupBtn(),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                )
               ],
             ),
           ),
