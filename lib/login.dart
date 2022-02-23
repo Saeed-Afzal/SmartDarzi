@@ -80,7 +80,7 @@ class _LoginState extends State<Login> {
   // TextEditingController CPassword = TextEditingController();
   GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
 
-Widget _buildForgotPasswordBtn() {
+  Widget _buildForgotPasswordBtn() {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
@@ -88,6 +88,41 @@ Widget _buildForgotPasswordBtn() {
         child: Text(
           'Forgot Password?',
           style: kLabelStyle,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginBtn() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 25.0),
+      width: double.infinity,
+      child: Container(
+        height: 63,
+        child: RaisedButton(
+          elevation: 5.0,
+          onPressed: () => login(context),
+          padding: EdgeInsets.all(15.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          color: Colors.white,
+          child: _isLoading
+              ? CircularProgressIndicator(
+                  color: Color(0xFF527DAA),
+                  strokeWidth: 1.0,
+                  value: 0.8
+                )
+              : Text(
+                  'LOGIN',
+                  style: TextStyle(
+                    color: Color(0xFF527DAA),
+                    letterSpacing: 1.5,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'OpenSans',
+                  ),
+                ),
         ),
       ),
     );
@@ -119,6 +154,122 @@ Widget _buildForgotPasswordBtn() {
       ),
     );
   }
+
+   Widget _buildSignInWithText() {
+    return Column(
+      children: <Widget>[
+        Text(
+          '- OR -',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        SizedBox(height: 20.0),
+        Text(
+          'Sign in with',
+          style: kLabelStyle,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSignupBtn() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        RichText(
+          text: TextSpan(
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              TextSpan(
+                text: 'Don\'t have an Account? ',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              
+            ],
+          ),
+        ),
+        GestureDetector(
+           onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Signup()),
+              );
+            },
+          child: RichText(
+          text: TextSpan(
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              TextSpan(
+              text: 'Sign Up',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            ],
+          ),
+        ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildSocialBtnRow() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 30.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          _buildSocialBtn(
+            () => {},
+            AssetImage(
+              'assets/facebookicon.svg',
+            ),
+          ),
+          _buildSocialBtn(
+            () => {},
+            AssetImage(
+              'assets/googleicon.svg',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSocialBtn(Function onTap, AssetImage logo) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 60.0,
+        width: 60.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          // ignore: prefer_const_literals_to_create_immutables
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              offset: Offset(0, 2),
+              blurRadius: 6.0,
+            ),
+          ],
+          image: DecorationImage(
+            image: logo,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -182,11 +333,11 @@ Widget _buildForgotPasswordBtn() {
                           controller: PasswordCont,
                         ),
                         _buildForgotPasswordBtn(),
-                         _buildRememberMeCheckbox(),
-                        // _buildLoginBtn(),
+                        _buildRememberMeCheckbox(),
+                        _buildLoginBtn(),
                         // _buildSignInWithText(),
                         // _buildSocialBtnRow(),
-                        // _buildSignupBtn(),
+                         _buildSignupBtn(),
                       ],
                     ),
                   ),

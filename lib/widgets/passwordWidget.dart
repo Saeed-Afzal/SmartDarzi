@@ -3,7 +3,8 @@ import 'package:flutter_ecommerce_app/Utilities/constants.dart';
 
 class PasswordWidget extends StatelessWidget {
    final TextEditingController controller;
-  const PasswordWidget({ Key key, this.controller}) : super(key: key);
+   final String text;
+  const PasswordWidget({ Key key, this.controller, this.text  = "Password"}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class PasswordWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Password',
+          text,
           style: kLabelStyle,
         ),
         SizedBox(height: 10.0),

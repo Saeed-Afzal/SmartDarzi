@@ -9,9 +9,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_ecommerce_app/bottomAppBar.dart';
 import 'package:flutter_ecommerce_app/login.dart';
+import 'package:flutter_ecommerce_app/widgets/TextFieldWidget.dart';
 import 'package:flutter_ecommerce_app/widgets/button_widget.dart';
+import 'package:flutter_ecommerce_app/widgets/emailWidget.dart';
+import 'package:flutter_ecommerce_app/widgets/passwordWidget.dart';
 import 'package:flutter_ecommerce_app/widgets/text_Fields.dart';
 
 class Signup extends StatefulWidget {
@@ -24,6 +28,7 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  bool _isLoading = false;
   //forupload
 
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -31,6 +36,52 @@ class _SignupState extends State<Signup> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   get key => null;
+
+  Widget _buildLoginBtn() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        RichText(
+          text: TextSpan(
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              TextSpan(
+                text: 'Already Have an Account? ',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Login()),
+            );
+          },
+          child: RichText(
+            text: TextSpan(
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                TextSpan(
+                  text: 'Login Now',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +94,6 @@ class _SignupState extends State<Signup> {
     TextEditingController CPassword = TextEditingController();
 
     GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
-
-    
 
     void validation() async {
       try {
@@ -137,128 +186,116 @@ class _SignupState extends State<Signup> {
       }
     }
 
-    return Scaffold(
-      key: globalKey,
-      backgroundColor: Colors.white,
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 40),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                    child: Image.asset(
-                  'assets/logo.png',
-                )),
-
-                //delete this
-                // Text(
-                //   'Register',
-                //   style: TextStyle(
-                //     color: Colors.blue,
-                //     fontSize: 40,
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                // ),
-                //delete this
-
-                Column(
-                  children: [
-                    MyTextField(
-                      controller: Username,
-                      obscureText: false,
-                      hintText: 'Username',
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    MyTextField(
-                      controller: Email,
-                      obscureText: false,
-                      icon: Icons.email,
-                      hintText: 'Email',
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    MyTextField(
-                      controller: Password,
-                      obscureText: true,
-                      icon: Icons.lock,
-                      hintText: 'Password',
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    MyTextField(
-                      controller: CPassword,
-                      obscureText: true,
-                      icon: Icons.lock,
-                      hintText: 'Confirm Password',
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-
-                //upload Files
-
-                //upload Files
-
-                Container(
-                  height: 40,
-                  width: 160,
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(36.0),
-                                      side: BorderSide(color: Colors.red)))),
-                      onPressed: () {
-                        validation();
-                        // delete this
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => Login()),
-                        // );
-                        // delete this
-                      },
-                      child: Text('Register')),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Already Have an Account ",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => Login()),
-                        );
-                      },
-                      child: Text(
-                        "Login Now ",
-                        style: TextStyle(color: Colors.red),
+    return SafeArea(
+        minimum: const EdgeInsets.all(1.0),
+        child: Scaffold(
+            key: globalKey,
+            backgroundColor: Colors.white,
+            body: AnnotatedRegion<SystemUiOverlayStyle>(
+                value: SystemUiOverlayStyle.light,
+                child: GestureDetector(
+                    onTap: () => FocusScope.of(context).unfocus(),
+                    child: Stack(children: <Widget>[
+                      Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        // margin: EdgeInsets.symmetric(horizontal: 40),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            // ignore: prefer_const_literals_to_create_immutables
+                            colors: [
+                              Color(0xFF73AEF5),
+                              Color(0xFF61A4F1),
+                              Color(0xFF478DE0),
+                              Color(0xFF398AE5),
+                            ],
+                            // ignore: prefer_const_literals_to_create_immutables
+                            stops: [0.1, 0.4, 0.7, 0.9],
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+                      SizedBox(
+                        height: double.infinity,
+                        child: SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 40.0,
+                            vertical: 60.0,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'Sign up',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'OpenSans',
+                                  fontSize: 30.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 20.0),
+                              TextFieldWidget(
+                                icon: Icons.person,
+                                controller: Username,
+                                hintText: 'Username',
+                              ),
+                              SizedBox(height: 20.0),
+                              EmailWidget(
+                                controller: Email,
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              PasswordWidget(
+                                controller: Password,
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              PasswordWidget(
+                                text: "Confirm Password",
+                                controller: CPassword,
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(vertical: 25.0),
+                                width: double.infinity,
+                                child: Container(
+                                  height: 63,
+                                  child: RaisedButton(
+                                    elevation: 5.0,
+                                    onPressed: () => validation(),
+                                    padding: EdgeInsets.all(15.0),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                    color: Colors.white,
+                                    child: _isLoading
+                                        ? CircularProgressIndicator(
+                                            color: Color(0xFF527DAA),
+                                            strokeWidth: 1.0,
+                                            value: 0.8)
+                                        : Text(
+                                            'Signup',
+                                            style: TextStyle(
+                                              color: Color(0xFF527DAA),
+                                              letterSpacing: 1.5,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'OpenSans',
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                              ),
+                              _buildLoginBtn(),
+                            ],
+                          ),
+                        ),
+                      )
+                    ])))));
   }
 }
 
