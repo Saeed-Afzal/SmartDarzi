@@ -43,7 +43,7 @@ class _MalesState extends State<Males> with SingleTickerProviderStateMixin {
                 text: 'T-Shirts',
               ),
               Tab(
-                text: 'Trousers',
+                text: 'Pants',
               ),
               Tab(
                 text: 'Shorts',

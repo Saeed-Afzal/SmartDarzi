@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/colors.dart';
 import 'package:flutter_ecommerce_app/config/size_config.dart';
 import 'package:flutter_ecommerce_app/home.dart';
+import 'package:flutter_ecommerce_app/orderHistory.dart';
 import 'package:flutter_ecommerce_app/profile.dart';
 import 'package:flutter_ecommerce_app/style.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,9 +25,10 @@ class _BottomBarState extends State<BottomBar> {
 // Number of tabs
   final tabs = [
     Home(),
-    Center(
-        child: PrimaryText(
-            text: 'Order History', size: 40, color: AppColors.primary)),
+    orderHistory(),
+    // Center(
+    //     child: PrimaryText(
+    //         text: 'Order History', size: 20, color: AppColors.primary)),
     Profile(),
     Center(
         child: PrimaryText(

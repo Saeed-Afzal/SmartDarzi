@@ -36,7 +36,7 @@ class ProductsCard extends StatelessWidget {
                   child: Image.network(imageUrl, fit: BoxFit.cover),
                 ),
               ),
-            ),
+  ),
             Text(
               name,
               style: Theme.of(context)
@@ -73,9 +73,6 @@ class ProductsCard extends StatelessWidget {
                 //FavBtn(),
               ],
             )
-          ],
-        ),
-      ),
-    );
-  }
-}
+          ]))
+
+);}}
