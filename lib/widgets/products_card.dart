@@ -1,50 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_app/Screens/constant.dart';
 
 class ProductsCard extends StatelessWidget {
   String name;
   String imageUrl;
   String price;
+  Function press;
   ProductsCard(
       {Key key,
       @required this.name,
       @required this.imageUrl,
-      @required this.price})
+      @required this.price,
+      @required this.press})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
+    return GestureDetector(
+      onTap: press,
       child: Container(
+        padding: EdgeInsets.symmetric(horizontal: defaultPadding),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(blurRadius: 5, color: Colors.blueGrey)],
+          color: Colors.blue[50],
+          borderRadius: const BorderRadius.all(
+            Radius.circular(defaultPadding * 1.25),
+          ),
         ),
-        width: 100,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // icon,
-              Container(
-                width: double.infinity,
-                height: 75,
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Center(
+                child: Hero(
+                  tag: "Cabbage",
+                  child: Image.network(imageUrl, fit: BoxFit.cover),
                 ),
               ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(name,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.blue)),
-              Text('Rs: $price')
-            ],
-          ),
+            ),
+            Text(
+              name,
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle1
+                  .copyWith(fontWeight: FontWeight.w600),
+            ),
+            Text(
+              "Fruits",
+              style: Theme.of(context).textTheme.caption,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text.rich(
+                  TextSpan(
+                    text: "\Rs",
+                    style: Theme.of(context).textTheme.subtitle1.copyWith(
+                        fontWeight: FontWeight.w600, color: primaryColor),
+                    children: [
+                      TextSpan(
+                        text: price,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      // TextSpan(
+                      //   text: "/kg",
+                      //   style: TextStyle(
+                      //       color: Colors.black26,
+                      //       fontWeight: FontWeight.normal),
+                      // )
+                    ],
+                  ),
+                ),
+                //FavBtn(),
+              ],
+            )
+          ],
         ),
       ),
     );

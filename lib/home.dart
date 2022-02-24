@@ -10,6 +10,7 @@ import 'package:flutter_ecommerce_app/orders/create_order.dart';
 import 'package:flutter_ecommerce_app/productDetail.dart';
 import 'package:flutter_ecommerce_app/style.dart';
 import 'package:flutter_ecommerce_app/widgets/Slider.dart';
+import 'package:flutter_ecommerce_app/widgets/animatedSearchBar.dart';
 import 'package:flutter_ecommerce_app/widgets/navigation.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -84,7 +85,8 @@ class _HomeState extends State<Home> {
           //Promo
 
           SizedBox(height: SizeConfig.blockSizeVertical * 4),
-
+          AnimatedSearchBar(),
+          SizedBox(height: SizeConfig.blockSizeVertical * 4),
           //animated text
           Center(
             child: AnimatedTextKit(

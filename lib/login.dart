@@ -109,10 +109,7 @@ class _LoginState extends State<Login> {
           color: Colors.white,
           child: _isLoading
               ? CircularProgressIndicator(
-                  color: Color(0xFF527DAA),
-                  strokeWidth: 1.0,
-                  value: 0.8
-                )
+                  color: Color(0xFF527DAA), strokeWidth: 1.0, value: 0.8)
               : Text(
                   'LOGIN',
                   style: TextStyle(
@@ -155,7 +152,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-   Widget _buildSignInWithText() {
+  Widget _buildSignInWithText() {
     return Column(
       children: <Widget>[
         Text(
@@ -190,33 +187,31 @@ class _LoginState extends State<Login> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              
             ],
           ),
         ),
         GestureDetector(
-           onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Signup()),
-              );
-            },
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Signup()),
+            );
+          },
           child: RichText(
-          text: TextSpan(
-            // ignore: prefer_const_literals_to_create_immutables
-            children: [
-              TextSpan(
-              text: 'Sign Up',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
+            text: TextSpan(
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                TextSpan(
+                  text: 'Sign Up',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-            ],
           ),
-        ),
         )
       ],
     );
@@ -337,7 +332,7 @@ class _LoginState extends State<Login> {
                         _buildLoginBtn(),
                         // _buildSignInWithText(),
                         // _buildSocialBtnRow(),
-                         _buildSignupBtn(),
+                        _buildSignupBtn(),
                       ],
                     ),
                   ),
