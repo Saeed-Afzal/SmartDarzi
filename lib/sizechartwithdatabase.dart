@@ -11,17 +11,15 @@ class Sizec extends StatefulWidget {
 FirebaseAuth auth = FirebaseAuth.instance;
 
 class _SizecState extends State<Sizec> {
-  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
+  final Stream _usersStream = FirebaseFirestore.instance
       .collection('userdata')
       .doc(auth.currentUser.uid)
-      .collection('Size Chart Data')
       .snapshots();
   addDatatoDatabase() {
     FirebaseFirestore.instance
         .collection('userdata')
         .doc(auth.currentUser.uid)
-        .collection('Size Chart Data')
-        .add({
+        .set({
       'size name': sizeNameController.text,
       'length': '${lengthController.text}',
       'chest': '${chestController.text}',
@@ -45,7 +43,7 @@ class _SizecState extends State<Sizec> {
     } else if (bottomController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          'Please Enter Bottom',
+          'Please Enter Pant',
           style: TextStyle(color: Colors.white),
         ),
         duration: Duration(seconds: 2),
