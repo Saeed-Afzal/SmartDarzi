@@ -11,7 +11,7 @@ class OrderHistoryCompleted extends StatefulWidget {
 
 class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
   final Stream<QuerySnapshot> _userOrderStream = FirebaseFirestore.instance
-      .collection("user order")
+      .collection("userorder")
       .doc(auth.currentUser.uid)
       .collection('product')
       .where("isCompleted", isEqualTo: true)

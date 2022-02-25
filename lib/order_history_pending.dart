@@ -13,7 +13,7 @@ FirebaseAuth auth = FirebaseAuth.instance;
 
 class _OrderHistoryPendingState extends State<OrderHistoryPending> {
   final Stream<QuerySnapshot> _userOrderStream = FirebaseFirestore.instance
-      .collection("user order")
+      .collection("userorder")
       .doc(auth.currentUser.uid)
       .collection('product')
       .where("isPending", isEqualTo: true)

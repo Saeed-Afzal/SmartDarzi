@@ -11,7 +11,7 @@ class OrderHistoryCancelled extends StatefulWidget {
 
 class _OrderHistoryCancelledState extends State<OrderHistoryCancelled> {
   final Stream<QuerySnapshot> _userOrderStream = FirebaseFirestore.instance
-      .collection("user order")
+      .collection("userorder")
       .doc(auth.currentUser.uid)
       .collection('product')
       .where("isCancelled", isEqualTo: true)

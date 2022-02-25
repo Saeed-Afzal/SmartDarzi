@@ -143,7 +143,7 @@ class _ProductPageState extends State<ProductPage> {
       }
       print('Outside of image url');
       await firestoreInstance
-          .collection('user order')
+          .collection('userorder')
           .doc(auth.currentUser.uid)
           .collection('product')
           .add({

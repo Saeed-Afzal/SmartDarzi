@@ -12,13 +12,13 @@ FirebaseAuth auth = FirebaseAuth.instance;
 
 class _SizecState extends State<Sizec> {
   final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
-      .collection('user data')
+      .collection('userdata')
       .doc(auth.currentUser.uid)
       .collection('Size Chart Data')
       .snapshots();
   addDatatoDatabase() {
     FirebaseFirestore.instance
-        .collection('user data')
+        .collection('userdata')
         .doc(auth.currentUser.uid)
         .collection('Size Chart Data')
         .add({
