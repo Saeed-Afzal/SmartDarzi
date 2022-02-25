@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_app/Screens/model/product.dart';
 import 'package:flutter_ecommerce_app/firebase_data/data_firebase.dart';
 import 'package:flutter_ecommerce_app/orders/productpage.dart';
 import 'package:flutter_ecommerce_app/widgets/products_card.dart';
@@ -55,13 +56,28 @@ class _SuitState extends State<Suit> {
                     itemBuilder: (ctx, index) {
                       return InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => ProductPage(
-                                    productData: _productsData,
-                                    index: index,
-                                  )));
+                          // Navigator.of(context).push(MaterialPageRoute(
+                          //     builder: (ctx) => ProductPage(
+                          //           productData: ProductData(
+                          //               images: List<String>.from(
+                          //                   _productsData[index]['image'])),
+                          //         )));
                         },
                         child: ProductsCard(
+                            press: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (ctx) => ProductPage(
+                                          productData: ProductData(
+                                              images: List<String>.from(
+                                                  _productsData[index]
+                                                      ['image']),
+                                              name: _productsData[index]
+                                                  ['name'],
+                                              price: _productsData[index]
+                                                  ['price']))));
+                            },
                             name: _productsData[index]['name'],
                             imageUrl: _productsData[index]['image'][0],
                             price: _productsData[index]['price']),

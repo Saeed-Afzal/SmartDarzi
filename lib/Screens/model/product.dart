@@ -17,3 +17,10 @@ class ProductData {
   List<String> images;
   ProductData({this.name,this.price,this.images});
 }
+
+class DataList {
+  String name;
+  int value;
+
+  DataList({this.name, this.value});
+}

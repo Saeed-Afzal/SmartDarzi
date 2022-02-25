@@ -1,24 +1,57 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_app/Screens/Component/Card_counter.dart';
+import 'package:flutter_ecommerce_app/Screens/constant.dart';
+import 'package:flutter_ecommerce_app/Screens/model/product.dart';
 import 'package:flutter_ecommerce_app/widgets/place_product_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 
-class ProductPage extends StatefulWidget {
-  int index;
-  List productData;
-  ProductPage({Key key, @required this.productData, @required this.index})
-      : super(key: key);
+enum SingingCharacter { lafayette, jefferson }
 
+class ProductPage extends StatefulWidget {
+  ProductPage({Key key, @required this.productData}) : super(key: key);
+  final ProductData productData;
   @override
   _ProductPageState createState() => _ProductPageState();
 }
 
 class _ProductPageState extends State<ProductPage> {
+  SingingCharacter _character = SingingCharacter.lafayette;
+  int selectedRadio = 0;
+  int _currentImage = 0;
+
+  List<Widget> buildPageIndicator() {
+    List<Widget> list = [];
+    for (var i = 0; i < widget.productData.images.length; i++) {
+      list.add(
+          i == _currentImage ? buildIndicator(true) : buildIndicator(false));
+    }
+    return list;
+  }
+
+  Widget buildIndicator(bool isActive) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 150),
+      margin: EdgeInsets.symmetric(horizontal: 5.0),
+      height: 8.0,
+      width: isActive ? 20.0 : 8.0,
+      decoration: BoxDecoration(
+        gradient: isActive ? kGradient : kGradientGrey,
+        borderRadius: BorderRadius.all(
+          Radius.circular(12),
+        ),
+      ),
+    );
+  }
+
+  List<dynamic> radioOption = [
+    {"value": 1, "name": "Smart Sizes"},
+    {"value": 2, "name": "My Sizes"}
+  ];
   List<dynamic> sizeType = [
     {"id": 1, "label": "Smart Sizes"},
     {"id": 2, "label": "My Sizes"}
@@ -51,32 +84,32 @@ class _ProductPageState extends State<ProductPage> {
     mySizeValue = '';
   }
 
-  void _pickImageGallery() async {
-    final picker = ImagePicker();
-    try {
-      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-      final pickedImageFile = File(pickedImage.path);
-      setState(() {
-        pickedImageData = pickedImageFile;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          'Your image is selected',
-          style: TextStyle(color: Colors.white),
-        ),
-        duration: Duration(seconds: 2),
-      ));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          '$e',
-          style: TextStyle(color: Colors.white),
-        ),
-        duration: Duration(seconds: 2),
-      ));
-    }
-    // Navigator.pop(context);
-  }
+  // void _pickImageGallery() async {
+  //   final picker = ImagePicker();
+  //   try {
+  //     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+  //     final pickedImageFile = File(pickedImage.path);
+  //     setState(() {
+  //       pickedImageData = pickedImageFile;
+  //     });
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //       content: Text(
+  //         'Your image is selected',
+  //         style: TextStyle(color: Colors.white),
+  //       ),
+  //       duration: Duration(seconds: 2),
+  //     ));
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //       content: Text(
+  //         '$e',
+  //         style: TextStyle(color: Colors.white),
+  //       ),
+  //       duration: Duration(seconds: 2),
+  //     ));
+  //   }
+  //   // Navigator.pop(context);
+  // }
 
   // void _remove() {
   //   setState(() {
@@ -85,97 +118,97 @@ class _ProductPageState extends State<ProductPage> {
   //   Navigator.pop(context);
   // }
 
-  addDataToDatabase() async {
-    if (sizeTypeIdFirstDropdown == '2') {
-      if (mySizeValue == '') {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            'Please select Your size',
-            style: TextStyle(color: Colors.white),
-          ),
-          duration: Duration(seconds: 2),
-        ));
-        return;
-      }
-    }
-    if (addressController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          'Please enter your address',
-          style: TextStyle(color: Colors.white),
-        ),
-        duration: Duration(seconds: 2),
-      ));
-      return;
-    }
-    if (sizeTypeIdFirstDropdown == '1') {
-      if (sizeIdOfSecondDropown == null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            'Please enter your size',
-            style: TextStyle(color: Colors.white),
-          ),
-          duration: Duration(seconds: 2),
-        ));
-        return;
-      }
-    }
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      String time = DateTime.now().toString();
-      var name = await firestoreInstance
-          .collection('userinfo')
-          .doc(auth.currentUser.uid)
-          .get();
-      if ((pickedImageData.toString().contains('/'))) {
-        var abc;
-        final ref = FirebaseStorage.instance
-            .ref()
-            .child('usersImages')
-            .child(name['name'] + '.jpg');
-        await ref.putFile(pickedImageData);
-        abc = await ref.getDownloadURL();
-        setState(() {
-          imageUrl = abc;
-        });
-      }
-      print('Outside of image url');
-      await firestoreInstance
-          .collection('userorder')
-          .doc(auth.currentUser.uid)
-          .collection('product')
-          .add({
-        'user name': name['name'],
-        'user id': auth.currentUser.uid,
-        'order placed': time,
-        'product name': widget.productData[widget.index]['name'],
-        'size type': sizeTypeIdFirstDropdown == '1'
-            ? sizes[int.parse(sizeIdOfSecondDropown) - 1]['Label']
-            : '',
-        'size name': mySizeValue,
-        'location': addressController.text.toString(),
-        'uploaded size': imageUrl,
-        'isPending': true,
-        'isCompleted': false,
-        'isCancelled': false,
-      });
-      setState(() {
-        _isLoading = false;
-      });
-      Navigator.of(context).pop();
-    } catch (e) {
-      print('$e');
-      setState(() {
-        _isLoading = false;
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
+  // addDataToDatabase() async {
+  //   if (sizeTypeIdFirstDropdown == '2') {
+  //     if (mySizeValue == '') {
+  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //         content: Text(
+  //           'Please select Your size',
+  //           style: TextStyle(color: Colors.white),
+  //         ),
+  //         duration: Duration(seconds: 2),
+  //       ));
+  //       return;
+  //     }
+  //   }
+  //   if (addressController.text.isEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //       content: Text(
+  //         'Please enter your address',
+  //         style: TextStyle(color: Colors.white),
+  //       ),
+  //       duration: Duration(seconds: 2),
+  //     ));
+  //     return;
+  //   }
+  //   if (sizeTypeIdFirstDropdown == '1') {
+  //     if (sizeIdOfSecondDropown == null) {
+  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //         content: Text(
+  //           'Please enter your size',
+  //           style: TextStyle(color: Colors.white),
+  //         ),
+  //         duration: Duration(seconds: 2),
+  //       ));
+  //       return;
+  //     }
+  //   }
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //   try {
+  //     String time = DateTime.now().toString();
+  //     var name = await firestoreInstance
+  //         .collection('userinfo')
+  //         .doc(auth.currentUser.uid)
+  //         .get();
+  //     if ((pickedImageData.toString().contains('/'))) {
+  //       var abc;
+  //       final ref = FirebaseStorage.instance
+  //           .ref()
+  //           .child('usersImages')
+  //           .child(name['name'] + '.jpg');
+  //       await ref.putFile(pickedImageData);
+  //       abc = await ref.getDownloadURL();
+  //       setState(() {
+  //         imageUrl = abc;
+  //       });
+  //     }
+  //     print('Outside of image url');
+  //     await firestoreInstance
+  //         .collection('userorder')
+  //         .doc(auth.currentUser.uid)
+  //         .collection('product')
+  //         .add({
+  //       'user name': name['name'],
+  //       'user id': auth.currentUser.uid,
+  //       'order placed': time,
+  //       'product name': widget.productData.name,
+  //       'size type': sizeTypeIdFirstDropdown == '1'
+  //           ? sizes[int.parse(sizeIdOfSecondDropown) - 1]['Label']
+  //           : '',
+  //       'size name': mySizeValue,
+  //       'location': addressController.text.toString(),
+  //       'uploaded size': imageUrl,
+  //       'isPending': true,
+  //       'isCompleted': false,
+  //       'isCancelled': false,
+  //     });
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     Navigator.of(context).pop();
+  //   } catch (e) {
+  //     print('$e');
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   } finally {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
@@ -190,289 +223,352 @@ class _ProductPageState extends State<ProductPage> {
     // ];
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Place Order'),
-        elevation: 0.0,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _pickImageGallery,
-        child: Icon(Icons.link_outlined),
-      ),
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                Container(
-                  margin:
-                      EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 10),
-                  height: 300,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        // topLeft: Radius.circular(10),
-                        // topRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                            child: Image.network(
-                          '${widget.productData[widget.index]['image'][0]}',
-                          height: 200,
-                          fit: BoxFit.fill,
-                        )),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
-                          child: Text(
-                            "Rs: ${widget.productData[widget.index]['price']}",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "${widget.productData[widget.index]['name']}",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              // Icon(
-                              //   Icons.favorite_outline,
-                              // ),
-                              Card(
-                                margin: EdgeInsets.only(right: 12),
-                                elevation: 6,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(35.0),
-                                ),
-                                child: SizedBox(
-                                  width: 35,
-                                  height: 35,
-                                  child: Icon(
-                                    Icons.favorite_outline,
-                                    color: Colors.black,
-                                    size: 19,
+      appBar: buildAppBar(),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _pickImageGallery,
+      //   child: Icon(Icons.link_outlined),
+      // ),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                margin: EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 10),
+                height: 360,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              // color: Color(0xFFF8F8F8),
+                              child: Stack(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 25),
+                                    child: PageView(
+                                      physics: BouncingScrollPhysics(),
+                                      onPageChanged: (int page) {
+                                        setState(() {
+                                          _currentImage = page;
+                                        });
+                                      },
+                                      children:
+                                          widget.productData.images.map((path) {
+                                        return Center(
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Container(
+                                              height: size.height * 0.50,
+                                              margin:
+                                                  EdgeInsets.only(right: 100),
+                                              child: Image.network(
+                                                path,
+                                                fit: BoxFit.fitHeight,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
+                                  widget.productData.images.length > 1
+                                      ? Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Container(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: buildPageIndicator(),
+                                            ),
+                                          ))
+                                      : Container(),
+                                ],
+                              ),
+                            ),
+                            // Positioned(
+                            //   bottom: -50,
+                            //   child: CartCounter(),
+                            // ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 18.0),
+                        child: Text(
+                          "Rs: ${widget.productData.price}",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  margin:
-                      EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 100),
-                  // height: 350,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      // bottomLeft: Radius.circular(15),
-                      // bottomRight: Radius.circular(15)
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 18.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "${widget.productData.name}",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.favorite_outline,
+                                color: Colors.black,
+                                size: 26,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(4),
+                      topRight: Radius.circular(4),
+                      bottomLeft: Radius.circular(4),
+                      bottomRight: Radius.circular(4)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: size.width * 1.0,
+                    height: 120,
+                    // decoration: BoxDecoration(
+                    //   color: Color(0xFFEEEEEE),
+                    //   boxShadow: [
+                    //     BoxShadow(
+                    //       color: Color(0xFF7B7B7B),
+                    //     )
+                    //   ],
+                    //   border: Border.all(
+                    //     color: Color(0xFF7B7B7B),
+                    //   ),
+                    // ),
                     child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
+                        Align(
+                          alignment: AlignmentDirectional(-0.85, 0),
                           child: Text(
-                            "Description ",
-                            style: TextStyle(
-                              fontSize: 14,
-                              // fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
-                          child: Text(
-                            "Best Winter Dresses Collections",
+                            'Fabric Details',
                             style: TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.blue,
                             ),
                           ),
                         ),
-
-                        //First DropDown
-                        FormHelper.dropDownWidgetWithLabel(
-                          context,
-                          "Size Type",
-                          "Select Size Type here",
-                          this.sizeTypeIdFirstDropdown,
-                          this.sizeType,
-                          (onChangedVal) {
-                            sizeTypeIdFirstDropdown = onChangedVal;
-                            sizeName = sizes
-                                .where((sizeItem) =>
-                                    sizeItem["ParentId"].toString() ==
-                                    onChangedVal.toString())
-                                .toList();
-                          },
-                          (onValidateVal) {
-                            if (onValidateVal == null) {
-                              return "Please select size type";
-                            }
-                            return null;
-                          },
-                          labelFontSize: 16,
-                          borderColor: Theme.of(context).primaryColor,
-                          borderFocusColor: Theme.of(context).primaryColor,
-                          borderRadius: 10,
-                          optionValue: "id",
-                          optionLabel: "label",
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        //Second DropDown
-                        sizeTypeIdFirstDropdown == '1'
-                            ? FormHelper.dropDownWidgetWithLabel(
-                                context,
-                                "Size Name",
-                                "Select Size",
-                                this.sizeIdOfSecondDropown,
-                                this.sizeName,
-                                (onChangedVal) {
-                                  this.sizeIdOfSecondDropown = onChangedVal;
-                                },
-                                (onValidate) {
-                                  return null;
-                                },
-                                labelFontSize: 16,
-                                borderColor: Theme.of(context).primaryColor,
-                                borderFocusColor:
-                                    Theme.of(context).primaryColor,
-                                borderRadius: 10,
-                                optionValue: "ID",
-                                optionLabel: "Label",
-                              )
-                            : Center(
-                                child: PlaceProductWidget(),
-                                // child: TextButton(
-                                //   onPressed: () {
-                                //     Navigator.of(context).push(
-                                //         MaterialPageRoute(
-                                //             builder: (ctx) => Sizec()));
-                                //   },
-                                //   child: Text('Get Size'),
-                                // ),
-                              ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        // Address Text Field
-
-                        Center(
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 30),
-                            constraints: BoxConstraints(minHeight: 55),
-                            child: TextFormField(
-                              controller: addressController,
-                              decoration: InputDecoration(
-                                hintText: 'Your Address',
-                                label: Text('Your address'),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: Colors.blue),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: Colors.blue),
-                                ),
-                              ),
+                        Expanded(
+                          child: ListTile(
+                            title: const Text('Lafayette'),
+                            leading: Radio<SingingCharacter>(
+                              value: SingingCharacter.lafayette,
+                              groupValue: _character,
+                              onChanged: (SingingCharacter value) {
+                                setState(() {
+                                  _character = value;
+                                });
+                              },
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        //Order Button
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              addDataToDatabase();
-                            },
-                            child: _isLoading
-                                ? CircularProgressIndicator(
-                                    color: Colors.white,
-                                  )
-                                : Text("Order Now"),
-                            style: ElevatedButton.styleFrom(
-                                fixedSize: const Size(340, 40),
-                                primary: Colors.blue),
+                        Expanded(
+                          child: ListTile(
+                            title: const Text('Thomas Jefferson'),
+                            leading: Radio<SingingCharacter>(
+                              value: SingingCharacter.jefferson,
+                              groupValue: _character,
+                              onChanged: (SingingCharacter value) {
+                                setState(() {
+                                  _character = value;
+                                });
+                              },
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
                         ),
                       ],
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: size.width * 1.0,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFEEEEEE),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFF7B7B7B),
+                        )
+                      ],
+                      border: Border.all(
+                        color: Color(0xFF7B7B7B),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: size.width * 1.0,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFEEEEEE),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFF7B7B7B),
+                        )
+                      ],
+                      border: Border.all(
+                        color: Color(0xFF7B7B7B),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      leading: BackButton(),
+      // backgroundColor: Color(0xFFF8F8F8),
+      elevation: 0,
+      centerTitle: true,
+      title: Text(
+        "Fruits",
+        // style: TextStyle(color: Colors.black),
+      ),
+      actions: [
+        // FavBtn(radius: 20),
+        SizedBox(width: defaultPadding),
+      ],
     );
   }
 }

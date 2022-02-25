@@ -5,7 +5,6 @@ import 'package:flutter_ecommerce_app/Screens/model/product.dart';
 //import 'package:flutter_ecommerce_app/Screens/model/product.dart';
 //import 'dart:math' as math;
 import 'Component/Card_counter.dart';
-import 'model/data.dart';
 
 //import 'components/cart_counter.dart';
 
@@ -31,7 +30,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   List<Widget> buildPageIndicator() {
     List<Widget> list = [];
     for (var i = 0;
-        i < [].length;
+        i < widget.productData.images.length;
         i++) {
       list.add(
           i == _currentImage ? buildIndicator(true) : buildIndicator(false));
