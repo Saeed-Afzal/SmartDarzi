@@ -164,6 +164,11 @@ class _SignupState extends State<Signup> {
             .showSnackBar(SnackBar(content: Text("Password is Empty")));
         return;
       }
+      if (Password.text.length < 8) {
+        globalKey.currentState
+            .showSnackBar(SnackBar(content: Text("Password is Short")));
+        return;
+      }
       if (CPassword.text.trim().isEmpty || CPassword.text.trim() == null) {
         globalKey.currentState.showSnackBar(
             SnackBar(content: Text("Confirm Your Password First")));

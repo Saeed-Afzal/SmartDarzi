@@ -22,17 +22,16 @@ class _PlaceProductWidgetState extends State<PlaceProductWidget> {
   }
 
   var v;
-  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
+  final Stream _usersStream = FirebaseFirestore.instance
       .collection('userdata')
       .doc(auth.currentUser.uid)
-      .collection('Size Chart Data')
       .snapshots();
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: _usersStream,
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(),
