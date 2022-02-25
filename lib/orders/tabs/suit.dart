@@ -69,4 +69,3 @@ class _SuitState extends State<Suit> {
                     }));
   }
 }
-

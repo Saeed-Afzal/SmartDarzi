@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/Screens/Component/cardshortdetail.dart';
 import 'package:flutter_ecommerce_app/Screens/Component/header.dart';
+import 'package:flutter_ecommerce_app/Screens/DetailScreen.dart';
 import 'package:flutter_ecommerce_app/Screens/constant.dart';
+import 'package:flutter_ecommerce_app/Screens/model/product.dart';
 import 'package:flutter_ecommerce_app/firebase_data/data_firebase.dart';
 import 'package:flutter_ecommerce_app/orders/productpage.dart';
 import 'package:flutter_ecommerce_app/widgets/products_card.dart';
@@ -114,14 +116,14 @@ class _TrousersState extends State<Trousers> {
                                                     secondaryAnimation) =>
                                                 FadeTransition(
                                                     opacity: animation,
-                                                    child: Text("hellow")
-                                                    // DetailsScreen(
-                                                    //   product: demo_products[index],
-                                                    //   onProductAdd: () {
-                                                    //     controller.addProductToCart(
-                                                    //         demo_products[index]);
-                                                    //   },
-                                                    // ),
+                                                    child:
+                                                    DetailsScreen(
+                                                      productData: ProductData(images: List<String>.from(_productsData[index]['image'])),
+                                                      onProductAdd: () {
+                                                        controller.addProductToCart(
+                                                            demo_products[index]);
+                                                      },
+                                                    ),
                                                     ),
                                           ),
                                         );
@@ -147,14 +149,13 @@ class _TrousersState extends State<Trousers> {
                                     alignment: Alignment.topLeft,
                                     child: AnimatedSwitcher(
                                       duration: panelTransition,
-                                      child: 
-                                      // controller.homeState ==
-                                      //         HomeState.normal
-                                           CardShortView(
-                                              controller: controller)
-                                          // : CartDetailsView(
-                                          //     controller: controller)
-                                              ,
+                                      child:
+                                          // controller.homeState ==
+                                          //         HomeState.normal
+                                          CardShortView(controller: controller)
+                                      // : CartDetailsView(
+                                      //     controller: controller)
+                                      ,
                                     ),
                                   ),
                                 ),

@@ -193,10 +193,10 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Place Order'),
-      //   elevation: 0.0,
-      // ),
+      appBar: AppBar(
+        title: Text('Place Order'),
+        elevation: 0.0,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _pickImageGallery,
         child: Icon(Icons.link_outlined),

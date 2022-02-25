@@ -30,10 +30,7 @@ class ProductsCard extends StatelessWidget {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
                 child: Center(
-                  child: Hero(
-                    tag: "Cabbage",
-                    child: Image.network(imageUrl, fit: BoxFit.cover),
-                  ),
+                  child: Image.network(imageUrl, fit: BoxFit.cover),
                 ),
               ),
               Text(
