@@ -3,14 +3,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_app/AddressScreens/AddressList.dart';
 import 'package:flutter_ecommerce_app/Screens/Component/Card_counter.dart';
 import 'package:flutter_ecommerce_app/Screens/constant.dart';
 import 'package:flutter_ecommerce_app/Screens/model/product.dart';
+import 'package:flutter_ecommerce_app/orders/tabs/customiseScreen.dart';
 import 'package:flutter_ecommerce_app/widgets/place_product_widget.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:geolocator/geolocator.dart';
+//import 'package:geolocator/geolocator.dart';
 
 enum SingingCharacter { fabric, nofabric }
 
@@ -22,7 +25,7 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  Position _currentPosition;
+  //Position _currentPosition;
   String date = "";
   DateTime selectedDate = DateTime.now();
 
@@ -71,25 +74,25 @@ class _ProductPageState extends State<ProductPage> {
 
   List<dynamic> sizeName = [];
 
-  TextEditingController addressController = TextEditingController();
+  // TextEditingController addressController = TextEditingController();
 
-  File pickedImageData;
-  String imageUrl = 'No image to show';
+  // File pickedImageData;
+  // String imageUrl = 'No image to show';
 
-  String sizeTypeIdFirstDropdown = '2';
-  String sizeIdOfFirstDropdown;
-  String sizeTypeIdSecondDropdown;
-  String sizeIdOfSecondDropown;
-  bool _isLoading = false;
+  // String sizeTypeIdFirstDropdown = '2';
+  // String sizeIdOfFirstDropdown;
+  // String sizeTypeIdSecondDropdown;
+  // String sizeIdOfSecondDropown;
+  // bool _isLoading = false;
 
-  FirebaseAuth auth = FirebaseAuth.instance;
-  FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
-  @override
-  void dispose() {
-    super.dispose();
-    addressController.dispose();
-    mySizeValue = '';
-  }
+  // FirebaseAuth auth = FirebaseAuth.instance;
+  // FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   addressController.dispose();
+  //   mySizeValue = '';
+  // }
 
   // void _pickImageGallery() async {
   //   final picker = ImagePicker();
@@ -411,18 +414,7 @@ class _ProductPageState extends State<ProductPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: size.width * 1.0,
-                    height: 120,
-                    // decoration: BoxDecoration(
-                    //   color: Color(0xFFEEEEEE),
-                    //   boxShadow: [
-                    //     BoxShadow(
-                    //       color: Color(0xFF7B7B7B),
-                    //     )
-                    //   ],
-                    //   border: Border.all(
-                    //     color: Color(0xFF7B7B7B),
-                    //   ),
-                    // ),
+                    height: 100,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -491,18 +483,7 @@ class _ProductPageState extends State<ProductPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: size.width * 1.0,
-                    height: 120,
-                    // decoration: BoxDecoration(
-                    //   color: Color(0xFFEEEEEE),
-                    //   boxShadow: [
-                    //     BoxShadow(
-                    //       color: Color(0xFF7B7B7B),
-                    //     )
-                    //   ],
-                    //   border: Border.all(
-                    //     color: Color(0xFF7B7B7B),
-                    //   ),
-                    // ),
+                    height: 100,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -571,25 +552,13 @@ class _ProductPageState extends State<ProductPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: size.width * 1.0,
-                    height: 100,
-                    // decoration: BoxDecoration(
-                    //   color: Color(0xFFEEEEEE),
-                    //   boxShadow: [
-                    //     BoxShadow(
-                    //       color: Color(0xFF7B7B7B),
-                    //     )
-                    //   ],
-                    //   border: Border.all(
-                    //     color: Color(0xFF7B7B7B),
-                    //   ),
-                    // ),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Align(
                           alignment: AlignmentDirectional(-0.85, 0),
                           child: Text(
-                            'Delivery Details',
+                            'Delivery Date',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
@@ -597,24 +566,16 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        // OutlinedButton(
-                        //   onPressed: () {
-                        //     debugPrint('Received click');
-                        //   },
-                        //   child: const Text('Click Me'),
-                        // ),
-                        if (_currentPosition != null)
-                          Text(
-                              "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
                         ElevatedButton(
-                          // style: style,
                           onPressed: () {
-                             _getCurrentLocation();
+                            _selectDate(context);
                           },
-                          child: const Text('Select Address'),
+                          child: Text("Choose Date"),
+                        ),
+                        Text(
+                            "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"),
+                        SizedBox(
+                          height: 10,
                         ),
                       ],
                     ),
@@ -642,25 +603,14 @@ class _ProductPageState extends State<ProductPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: size.width * 1.0,
-                    height: 120,
-                    // decoration: BoxDecoration(
-                    //   color: Color(0xFFEEEEEE),
-                    //   boxShadow: [
-                    //     BoxShadow(
-                    //       color: Color(0xFF7B7B7B),
-                    //     )
-                    //   ],
-                    //   border: Border.all(
-                    //     color: Color(0xFF7B7B7B),
-                    //   ),
-                    // ),
+
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Align(
                           alignment: AlignmentDirectional(-0.85, 0),
                           child: Text(
-                            'Delivery Date',
+                            'Delivery Details',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
@@ -668,30 +618,37 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
+                        // SizedBox(
+                        //   height: 15,
+                        // ),
                         // OutlinedButton(
                         //   onPressed: () {
                         //     debugPrint('Received click');
                         //   },
                         //   child: const Text('Click Me'),
                         // ),
+                        // if (_currentPosition != null)
+                        //   Text(
+                        //       "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
                         ElevatedButton(
+                          // style: style,
                           onPressed: () {
-                            _selectDate(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddressList()),
+                            );
+                            //  _getCurrentLocation();
                           },
-                          child: Text("Choose Date"),
-                        ),
-                        Text(
-                            "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"),
-                        SizedBox(
-                          height: 10,
+                          child: const Text('Select Address'),
                         ),
                       ],
                     ),
                   ),
                 ),
+              ),
+               SizedBox(
+                height: 10,
               ),
               Container(
                 width: double.infinity,
@@ -711,55 +668,72 @@ class _ProductPageState extends State<ProductPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: size.width * 1.0,
-                    height: 140,
-                    // decoration: BoxDecoration(
-                    //   color: Color(0xFFEEEEEE),
-                    //   boxShadow: [
-                    //     BoxShadow(
-                    //       color: Color(0xFF7B7B7B),
-                    //     )
-                    //   ],
-                    //   border: Border.all(
-                    //     color: Color(0xFF7B7B7B),
-                    //   ),
-                    // ),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Align(
-                          alignment: AlignmentDirectional(-0.85, 0),
-                          child: Text(
-                            'Select Styles',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.blue,
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 180,
+                          margin: EdgeInsets.all(10),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage("assets/sideImage.jpg"),
+                              fit: BoxFit.cover,
+                              colorFilter: new ColorFilter.mode(
+                                  Colors.black.withOpacity(0.4),
+                                  BlendMode.dstATop),
                             ),
+                            borderRadius: BorderRadius.circular(
+                                15), // Set rounded corner radius
                           ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        // OutlinedButton(
-                        //   onPressed: () {
-                        //     debugPrint('Received click');
-                        //   },
-                        //   child: const Text('Click Me'),
-                        // ),
-                        ElevatedButton(
-                          onPressed: () {
-                            _selectDate(context);
-                          },
-                          child: Text("Choose"),
-                        ),
-                      
-                        SizedBox(
-                          height: 10,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              new Text(
+                                "For More Customization",
+                                style: TextStyle(
+                                    color: HexColor("#0071bc").withOpacity(0.8),
+                                    fontSize: 28.0,
+                                    height: 1.4,
+                                    fontWeight: FontWeight.w600),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              OutlinedButton(
+                                  child: Text("Click Here".toUpperCase(),
+                                      style: TextStyle(fontSize: 14)),
+                                  style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.white),
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              HexColor("#0071bc")),
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.zero,
+                                              side: BorderSide(
+                                                  color:
+                                                      HexColor("#0071bc"))))),
+                                  onPressed: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (ctx) => CustomiseScreen()));
+                                  })
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 10,
               ),
             ],
           ),
@@ -775,7 +749,7 @@ class _ProductPageState extends State<ProductPage> {
       elevation: 0,
       centerTitle: true,
       title: Text(
-        "Fruits",
+        "Place Order",
         // style: TextStyle(color: Colors.black),
       ),
       actions: [
@@ -798,19 +772,15 @@ class _ProductPageState extends State<ProductPage> {
       });
   }
 
-
-
-
-
-    _getCurrentLocation() {
-    Geolocator
-      .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
-      .then((Position position) {
-        setState(() {
-          _currentPosition = position;
-        });
-      }).catchError((e) {
-        print(e);
-      });
-  }
+  //   _getCurrentLocation() {
+  //   Geolocator
+  //     .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
+  //     .then((Position position) {
+  //       setState(() {
+  //         _currentPosition = position;
+  //       });
+  //     }).catchError((e) {
+  //       print(e);
+  //     });
+  // }
 }
