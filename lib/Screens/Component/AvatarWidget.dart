@@ -18,11 +18,11 @@ class _AvatarWidgetState extends State<AvatarWidget> {
   Widget build(BuildContext context) {
     return Container(
       child: CircleAvatar(
-          backgroundColor: HexColor('#0000ff'),
+          backgroundColor: HexColor('#FFFFFF'),
           radius: widget.radius,
           child: Text(
             _nameInitials(widget.name),
-            style: TextStyle(fontSize: widget.fontSize),
+            style: TextStyle(fontSize: widget.fontSize, color: Colors.black),
           )),
     );
   }
