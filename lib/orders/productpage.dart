@@ -9,8 +9,10 @@ import 'package:flutter_ecommerce_app/Screens/model/product.dart';
 import 'package:flutter_ecommerce_app/widgets/place_product_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 
-enum SingingCharacter { lafayette, jefferson }
+enum SingingCharacter { fabric, nofabric }
 
 class ProductPage extends StatefulWidget {
   ProductPage({Key key, @required this.productData}) : super(key: key);
@@ -20,7 +22,12 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  SingingCharacter _character = SingingCharacter.lafayette;
+  Position _currentPosition;
+  String date = "";
+  DateTime selectedDate = DateTime.now();
+
+  SingingCharacter _character = SingingCharacter.fabric;
+
   int selectedRadio = 0;
   int _currentImage = 0;
 
@@ -222,8 +229,6 @@ class _ProductPageState extends State<ProductPage> {
     //   {"ID": 3, "Label": "Large", "ParentId": 1},
     // ];
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -434,9 +439,9 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         Expanded(
                           child: ListTile(
-                            title: const Text('Lafayette'),
+                            title: const Text('I have fabric'),
                             leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.lafayette,
+                              value: SingingCharacter.fabric,
                               groupValue: _character,
                               onChanged: (SingingCharacter value) {
                                 setState(() {
@@ -448,9 +453,89 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         Expanded(
                           child: ListTile(
-                            title: const Text('Thomas Jefferson'),
+                            title: const Text('I dont have fabric'),
                             leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.jefferson,
+                              value: SingingCharacter.nofabric,
+                              groupValue: _character,
+                              onChanged: (SingingCharacter value) {
+                                setState(() {
+                                  _character = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: size.width * 1.0,
+                    height: 120,
+                    // decoration: BoxDecoration(
+                    //   color: Color(0xFFEEEEEE),
+                    //   boxShadow: [
+                    //     BoxShadow(
+                    //       color: Color(0xFF7B7B7B),
+                    //     )
+                    //   ],
+                    //   border: Border.all(
+                    //     color: Color(0xFF7B7B7B),
+                    //   ),
+                    // ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Align(
+                          alignment: AlignmentDirectional(-0.85, 0),
+                          child: Text(
+                            'Size Details',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListTile(
+                            title: const Text('Pre Made Size'),
+                            leading: Radio<SingingCharacter>(
+                              value: SingingCharacter.fabric,
+                              groupValue: _character,
+                              onChanged: (SingingCharacter value) {
+                                setState(() {
+                                  _character = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListTile(
+                            title: const Text('Custom Size'),
+                            leading: Radio<SingingCharacter>(
+                              value: SingingCharacter.nofabric,
                               groupValue: _character,
                               onChanged: (SingingCharacter value) {
                                 setState(() {
@@ -487,20 +572,51 @@ class _ProductPageState extends State<ProductPage> {
                   child: Container(
                     width: size.width * 1.0,
                     height: 100,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFEEEEEE),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xFF7B7B7B),
-                        )
-                      ],
-                      border: Border.all(
-                        color: Color(0xFF7B7B7B),
-                      ),
-                    ),
+                    // decoration: BoxDecoration(
+                    //   color: Color(0xFFEEEEEE),
+                    //   boxShadow: [
+                    //     BoxShadow(
+                    //       color: Color(0xFF7B7B7B),
+                    //     )
+                    //   ],
+                    //   border: Border.all(
+                    //     color: Color(0xFF7B7B7B),
+                    //   ),
+                    // ),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
-                      children: [],
+                      children: [
+                        Align(
+                          alignment: AlignmentDirectional(-0.85, 0),
+                          child: Text(
+                            'Delivery Details',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        // OutlinedButton(
+                        //   onPressed: () {
+                        //     debugPrint('Received click');
+                        //   },
+                        //   child: const Text('Click Me'),
+                        // ),
+                        if (_currentPosition != null)
+                          Text(
+                              "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
+                        ElevatedButton(
+                          // style: style,
+                          onPressed: () {
+                             _getCurrentLocation();
+                          },
+                          child: const Text('Select Address'),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -526,27 +642,124 @@ class _ProductPageState extends State<ProductPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: size.width * 1.0,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFEEEEEE),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xFF7B7B7B),
-                        )
-                      ],
-                      border: Border.all(
-                        color: Color(0xFF7B7B7B),
-                      ),
-                    ),
+                    height: 120,
+                    // decoration: BoxDecoration(
+                    //   color: Color(0xFFEEEEEE),
+                    //   boxShadow: [
+                    //     BoxShadow(
+                    //       color: Color(0xFF7B7B7B),
+                    //     )
+                    //   ],
+                    //   border: Border.all(
+                    //     color: Color(0xFF7B7B7B),
+                    //   ),
+                    // ),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
-                      children: [],
+                      children: [
+                        Align(
+                          alignment: AlignmentDirectional(-0.85, 0),
+                          child: Text(
+                            'Delivery Date',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        // OutlinedButton(
+                        //   onPressed: () {
+                        //     debugPrint('Received click');
+                        //   },
+                        //   child: const Text('Click Me'),
+                        // ),
+                        ElevatedButton(
+                          onPressed: () {
+                            _selectDate(context);
+                          },
+                          child: Text("Choose Date"),
+                        ),
+                        Text(
+                            "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: size.width * 1.0,
+                    height: 140,
+                    // decoration: BoxDecoration(
+                    //   color: Color(0xFFEEEEEE),
+                    //   boxShadow: [
+                    //     BoxShadow(
+                    //       color: Color(0xFF7B7B7B),
+                    //     )
+                    //   ],
+                    //   border: Border.all(
+                    //     color: Color(0xFF7B7B7B),
+                    //   ),
+                    // ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Align(
+                          alignment: AlignmentDirectional(-0.85, 0),
+                          child: Text(
+                            'Select Styles',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        // OutlinedButton(
+                        //   onPressed: () {
+                        //     debugPrint('Received click');
+                        //   },
+                        //   child: const Text('Click Me'),
+                        // ),
+                        ElevatedButton(
+                          onPressed: () {
+                            _selectDate(context);
+                          },
+                          child: Text("Choose"),
+                        ),
+                      
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -570,5 +783,34 @@ class _ProductPageState extends State<ProductPage> {
         SizedBox(width: defaultPadding),
       ],
     );
+  }
+
+  _selectDate(BuildContext context) async {
+    final DateTime selected = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2010),
+      lastDate: DateTime(2025),
+    );
+    if (selected != null && selected != selectedDate)
+      setState(() {
+        selectedDate = selected;
+      });
+  }
+
+
+
+
+
+    _getCurrentLocation() {
+    Geolocator
+      .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
+      .then((Position position) {
+        setState(() {
+          _currentPosition = position;
+        });
+      }).catchError((e) {
+        print(e);
+      });
   }
 }

@@ -33,6 +33,12 @@ dependencies:
   flutter_slidable:
   snippet_coder_utils: ^1.0.5
   image_picker: ^0.8.4+4
+  geocoding: ^1.0.5
+  geolocator: ^6.1.1
+
+
+
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
