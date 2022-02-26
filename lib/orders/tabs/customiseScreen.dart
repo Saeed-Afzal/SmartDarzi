@@ -7,6 +7,7 @@ import 'package:flutter_ecommerce_app/AddressScreens/AddressList.dart';
 import 'package:flutter_ecommerce_app/Screens/Component/Card_counter.dart';
 import 'package:flutter_ecommerce_app/Screens/constant.dart';
 import 'package:flutter_ecommerce_app/Screens/model/product.dart';
+import 'package:flutter_ecommerce_app/orders/tabs/sharePrefe.dart';
 import 'package:flutter_ecommerce_app/widgets/place_product_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -27,6 +28,8 @@ class CustomiseScreen extends StatefulWidget {
 }
 
 class _CustomiseScreenState extends State<CustomiseScreen> {
+  final _preferenceService = SharedPref();
+
   //Position _currentPosition;
   String date = "";
   DateTime selectedDate = DateTime.now();
@@ -75,151 +78,16 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
     mySizeValue = '';
   }
 
-  // void _pickImageGallery() async {
-  //   final picker = ImagePicker();
-  //   try {
-  //     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-  //     final pickedImageFile = File(pickedImage.path);
-  //     setState(() {
-  //       pickedImageData = pickedImageFile;
-  //     });
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //       content: Text(
-  //         'Your image is selected',
-  //         style: TextStyle(color: Colors.white),
-  //       ),
-  //       duration: Duration(seconds: 2),
-  //     ));
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //       content: Text(
-  //         '$e',
-  //         style: TextStyle(color: Colors.white),
-  //       ),
-  //       duration: Duration(seconds: 2),
-  //     ));
-  //   }
-  //   // Navigator.pop(context);
-  // }
-
-  // void _remove() {
-  //   setState(() {
-  //     _pickedImage = null;
-  //   });
-  //   Navigator.pop(context);
-  // }
-
-  // addDataToDatabase() async {
-  //   if (sizeTypeIdFirstDropdown == '2') {
-  //     if (mySizeValue == '') {
-  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //         content: Text(
-  //           'Please select Your size',
-  //           style: TextStyle(color: Colors.white),
-  //         ),
-  //         duration: Duration(seconds: 2),
-  //       ));
-  //       return;
-  //     }
-  //   }
-  //   if (addressController.text.isEmpty) {
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //       content: Text(
-  //         'Please enter your address',
-  //         style: TextStyle(color: Colors.white),
-  //       ),
-  //       duration: Duration(seconds: 2),
-  //     ));
-  //     return;
-  //   }
-  //   if (sizeTypeIdFirstDropdown == '1') {
-  //     if (sizeIdOfSecondDropown == null) {
-  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //         content: Text(
-  //           'Please enter your size',
-  //           style: TextStyle(color: Colors.white),
-  //         ),
-  //         duration: Duration(seconds: 2),
-  //       ));
-  //       return;
-  //     }
-  //   }
-  //   setState(() {
-  //     _isLoading = true;
-  //   });
-  //   try {
-  //     String time = DateTime.now().toString();
-  //     var name = await firestoreInstance
-  //         .collection('userinfo')
-  //         .doc(auth.currentUser.uid)
-  //         .get();
-  //     if ((pickedImageData.toString().contains('/'))) {
-  //       var abc;
-  //       final ref = FirebaseStorage.instance
-  //           .ref()
-  //           .child('usersImages')
-  //           .child(name['name'] + '.jpg');
-  //       await ref.putFile(pickedImageData);
-  //       abc = await ref.getDownloadURL();
-  //       setState(() {
-  //         imageUrl = abc;
-  //       });
-  //     }
-  //     print('Outside of image url');
-  //     await firestoreInstance
-  //         .collection('userorder')
-  //         .doc(auth.currentUser.uid)
-  //         .collection('product')
-  //         .add({
-  //       'user name': name['name'],
-  //       'user id': auth.currentUser.uid,
-  //       'order placed': time,
-  //       'product name': widget.productData.name,
-  //       'size type': sizeTypeIdFirstDropdown == '1'
-  //           ? sizes[int.parse(sizeIdOfSecondDropown) - 1]['Label']
-  //           : '',
-  //       'size name': mySizeValue,
-  //       'location': addressController.text.toString(),
-  //       'uploaded size': imageUrl,
-  //       'isPending': true,
-  //       'isCompleted': false,
-  //       'isCancelled': false,
-  //     });
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //     Navigator.of(context).pop();
-  //   } catch (e) {
-  //     print('$e');
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //   } finally {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
-    // this.sizeType.add({"id": 1, "label": "Smart Sizes"});
-    // this.sizeType.add({"id": 2, "label": "My Sizes"});
-
-    // this.sizes = [
-    //   {"ID": 1, "Label": "Small", "ParentId": 1},
-    //   {"ID": 2, "Label": "Medium", "ParentId": 1},
-    //   {"ID": 3, "Label": "Large", "ParentId": 1},
-    // ];
   }
 
-  // Future<UserAuth> _authenticateLogin() async {
-  //   SharedPref localStorage = SharedPref();
-  //   var authMap = await localStorage.read('authData');
-  //   if (authMap != null) return UserAuth.fromJson(jsonDecode(authMap));
-  //   return null;
-  // }
+  void saveCustomization() {
+    final dataView = Data(guid: "2321312312321", isCustomized: true);
+    print("Save Customization");
+    _preferenceService.saveCustomization(dataView);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -238,10 +106,14 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                   child: Container(
                     height: size.height * 0.40,
                     margin: EdgeInsets.only(right: 25),
-                    child: Image.asset(
-                      "assets/shrt3.jpg",
-                      fit: BoxFit.fitHeight,
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/claZwr.gif',
+                      image: 'https://picsum.photos/250?image=9',
                     ),
+                    // Image.asset(
+                    //   "assets/shrt3.jpg",
+                    //   fit: BoxFit.fitHeight,
+                    // ),
                   ),
                 ),
               ),
@@ -710,7 +582,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
       ),
       actions: [
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            saveCustomization();
+          },
           child: Icon(
             Icons.check,
             size: 26.0,

@@ -21,7 +21,7 @@ class ProductsCard extends StatelessWidget {
         child: Container(
             padding: EdgeInsets.symmetric(horizontal: defaultPadding),
             decoration: BoxDecoration(
-              color: Colors.blue[50],
+              color: Colors.blueGrey.shade50,
               borderRadius: const BorderRadius.all(
                 Radius.circular(defaultPadding * 1.25),
               ),
@@ -30,7 +30,11 @@ class ProductsCard extends StatelessWidget {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
                 child: Center(
-                  child: Image.network(imageUrl, fit: BoxFit.cover),
+                  child: FadeInImage.assetNetwork(
+                    placeholder: imageLoading,
+                    image: imageUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Text(
@@ -40,21 +44,21 @@ class ProductsCard extends StatelessWidget {
                     .subtitle1
                     .copyWith(fontWeight: FontWeight.w600),
               ),
-              Text(
-                "Fruits",
-                style: Theme.of(context).textTheme.caption,
-              ),
+              // Text(
+              //   "Fruits",
+              //   style: Theme.of(context).textTheme.caption,
+              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text.rich(
                     TextSpan(
-                      text: "\Rs",
+                      text: "\Rs: ",
                       style: Theme.of(context).textTheme.subtitle1.copyWith(
                           fontWeight: FontWeight.w600, color: primaryColor),
                       children: [
                         TextSpan(
-                          text: price,
+                          text: price + "/=",
                           style: TextStyle(color: Colors.black),
                         ),
                         // TextSpan(

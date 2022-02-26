@@ -1,6 +1,6 @@
 class Product {
   final String title, image;
- Product({this.title, this.image});
+  Product({this.title, this.image});
 }
 
 List<Product> demo_products = [
@@ -15,7 +15,7 @@ class ProductData {
   String name;
   String price;
   List<String> images;
-  ProductData({this.name,this.price,this.images});
+  ProductData({this.name, this.price, this.images});
 }
 
 class DataList {
@@ -23,4 +23,11 @@ class DataList {
   int value;
 
   DataList({this.name, this.value});
+}
+
+class Data {
+  final String guid;
+  final bool isCustomized;
+
+  Data({this.guid, this.isCustomized});
 }

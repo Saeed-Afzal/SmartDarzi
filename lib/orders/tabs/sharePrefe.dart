@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_app/Screens/model/product.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// import 'package:shared_preferences/shared_preferences.dart';
 
-class SharedPref<T> {
+class SharedPref {
   // readObject(String key) async {
   //   final prefs = await SharedPreferences.getInstance();
   //   return json.decode(prefs.getString(key));
@@ -18,10 +18,10 @@ class SharedPref<T> {
   //   return prefs.getString(key);
   // }
 
-  save(String key, value) async {
-    var sharedPreferences = SharedPreferences;
-    final prefs = await sharedPreferences.getInstance();
-    prefs.setString(key, (value));
+  Future saveCustomization(Data data) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('CustomizationID', data.guid);
+    await prefs.setBool("isCustomized", data.isCustomized);
   }
 
   // remove(String key) async {

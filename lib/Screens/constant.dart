@@ -9,6 +9,8 @@ const primaryColor = Color(0xFF40A944);
 
 const panelTransition = Duration(milliseconds: 500);
 
+const imageLoading = 'assets/claZwr.gif';
+
 LinearGradient kGradient = LinearGradient(
   begin: Alignment.centerLeft,
   end: Alignment.centerRight,

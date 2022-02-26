@@ -273,8 +273,8 @@ class _ProductPageState extends State<ProductPage> {
                     children: [
                       Expanded(
                         child: Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.center,
+                          // clipBehavior: Clip.none,
+                          // alignment: Alignment.center,
                           children: [
                             Container(
                               // color: Color(0xFFF8F8F8),
@@ -295,12 +295,14 @@ class _ProductPageState extends State<ProductPage> {
                                           child: Align(
                                             alignment: Alignment.centerRight,
                                             child: Container(
-                                              height: size.height * 0.50,
+                                              height: size.height * 0.40,
                                               margin:
                                                   EdgeInsets.only(right: 100),
-                                              child: Image.network(
-                                                path,
-                                                fit: BoxFit.fitHeight,
+                                              child: FadeInImage.assetNetwork(
+                                                placeholder:
+                                                    'assets/claZwr.gif',
+                                                image:
+                                                    path,
                                               ),
                                             ),
                                           ),
@@ -603,7 +605,6 @@ class _ProductPageState extends State<ProductPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: size.width * 1.0,
-
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -647,7 +648,7 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                 ),
               ),
-               SizedBox(
+              SizedBox(
                 height: 10,
               ),
               Container(
@@ -721,8 +722,10 @@ class _ProductPageState extends State<ProductPage> {
                                                   color:
                                                       HexColor("#0071bc"))))),
                                   onPressed: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (ctx) => CustomiseScreen()));
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                CustomiseScreen()));
                                   })
                             ],
                           ),
