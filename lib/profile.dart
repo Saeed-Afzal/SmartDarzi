@@ -34,8 +34,6 @@ class UserProfileData extends StatefulWidget {
   State<UserProfileData> createState() => _UserProfileDataState();
 }
 
-
-
 // File _image;
 // final picker = ImagePicker();
 
@@ -65,45 +63,31 @@ class UserProfileData extends StatefulWidget {
 //   }
 // }
 
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
 class _UserProfileDataState extends State<UserProfileData> {
   Future getUserData() async {
-  try {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    var users = await FirebaseFirestore.instance
-        .collection('userinfo')
-        .doc(auth.currentUser.uid)
-        .get();
-    return users;
-  } on FirebaseAuthException catch (e) {
-    print(e.message);
-    return [];
-  } catch (e) {
-    print(e);
-    return [];
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      var users = await FirebaseFirestore.instance
+          .collection('userinfo')
+          .doc(auth.currentUser.uid)
+          .get();
+      return users;
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
   }
-}
-var pickedImageData;
-void _pickImageGallery() async {
+
+
+
+
+
+
+  var pickedImageData;
+  void _pickImageGallery() async {
     final picker = ImagePicker();
     try {
       final pickedImage = await picker.pickImage(source: ImageSource.gallery);
@@ -118,6 +102,8 @@ void _pickImageGallery() async {
         ),
         duration: Duration(seconds: 2),
       ));
+      print(pickedImageData);
+      addDataToDatabase();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
@@ -129,21 +115,35 @@ void _pickImageGallery() async {
     }
     // Navigator.pop(context);
   }
-var _pickedImage;
+
+final picker = ImagePicker();
+
+  Future pickImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      File _imageFile = File(pickedFile.path);
+    });
+  }
+File _imageFile;
+
+
+
+
+
+  var _pickedImage;
   void _remove() {
     setState(() {
       _pickedImage = null;
     });
     Navigator.pop(context);
+
   }
 
-
-  var  imageUrl;
+  var imageUrl;
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
-addDataToDatabase() async {
-
-
+  addDataToDatabase() async {
     // setState(() {
     //   _isLoading = true;
     // });
@@ -154,6 +154,7 @@ addDataToDatabase() async {
           .doc(auth.currentUser.uid)
           .get();
       if ((pickedImageData.toString().contains('/'))) {
+        print('inside of image function');
         var abc;
         final ref = FirebaseStorage.instance
             .ref()
@@ -163,19 +164,19 @@ addDataToDatabase() async {
         abc = await ref.getDownloadURL();
         setState(() {
           imageUrl = abc;
+          print(abc);
         });
       }
       print('Outside of image url');
       await firestoreInstance
           .collection('userinfo')
-          .doc(auth.currentUser.uid) 
-          .set({
-            'image': imageUrl
-      });
+          .doc(auth.currentUser.uid)
+          .update({'image': imageUrl});
       // setState(() {
       //   _isLoading = false;
       // });
       Navigator.of(context).pop();
+
     } catch (e) {
       print('$e');
       // setState(() {
@@ -187,22 +188,6 @@ addDataToDatabase() async {
       // });
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {

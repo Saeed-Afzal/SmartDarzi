@@ -779,7 +779,10 @@ class _ProductPageState extends State<ProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(onPressed: addUserProductData, child: Text("Send"))
+                ElevatedButton(onPressed: addUserProductData, child: Text("CHECKOUT")),
+                SizedBox(
+                  height: 10,
+                ),
               ],
             ),
           ),
@@ -790,7 +793,12 @@ class _ProductPageState extends State<ProductPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      leading: BackButton(),
+      leading: GestureDetector(
+        
+        onTap: (){
+          // Navigator.pop(context);
+        },
+        child: BackButton()),
       // backgroundColor: Color(0xFFF8F8F8),
       elevation: 0,
       centerTitle: true,
