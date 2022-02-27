@@ -58,7 +58,7 @@ class ProductsCard extends StatelessWidget {
                           fontWeight: FontWeight.w600, color: primaryColor),
                       children: [
                         TextSpan(
-                          text: price + "/=",
+                          text: price == null ? "N/A" : price + "/=",
                           style: TextStyle(color: Colors.black),
                         ),
                         // TextSpan(
