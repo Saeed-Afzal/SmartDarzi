@@ -22,7 +22,15 @@ enum DamanCharacter { round, straight }
 enum shalwarCharacter { simple, trouser, straight }
 
 class CustomiseScreen extends StatefulWidget {
-  CustomiseScreen({Key key}) : super(key: key);
+  String name;
+  String imageUrl;
+  String price;
+  CustomiseScreen({
+    Key key,
+    @required this.name,
+    @required this.imageUrl,
+    @required this.price,
+  }) : super(key: key);
   @override
   _CustomiseScreenState createState() => _CustomiseScreenState();
 }
@@ -101,19 +109,13 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
           child: Column(
             children: <Widget>[
               Center(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    height: size.height * 0.40,
-                    margin: EdgeInsets.only(right: 25),
-                    child: FadeInImage.assetNetwork(
-                      placeholder: 'assets/claZwr.gif',
-                      image: 'https://picsum.photos/250?image=9',
-                    ),
-                    // Image.asset(
-                    //   "assets/shrt3.jpg",
-                    //   fit: BoxFit.fitHeight,
-                    // ),
+                child: Container(
+                  height: size.height * 0.40,
+                  // margin: EdgeInsets.only(right: 50),
+                  child: FadeInImage.assetNetwork(
+                    placeholder: imageLoading,
+                    image: widget.imageUrl,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
               ),
@@ -128,7 +130,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "Kings Hubb Deal 1",
+                          widget.name,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -139,7 +141,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "RS 399.00",
+                          "RS: " + widget.price + ".00",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

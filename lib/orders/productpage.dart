@@ -301,8 +301,7 @@ class _ProductPageState extends State<ProductPage> {
                                               child: FadeInImage.assetNetwork(
                                                 placeholder:
                                                     'assets/claZwr.gif',
-                                                image:
-                                                    path,
+                                                image: path,
                                               ),
                                             ),
                                           ),
@@ -724,8 +723,12 @@ class _ProductPageState extends State<ProductPage> {
                                   onPressed: () {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder: (ctx) =>
-                                                CustomiseScreen()));
+                                            builder: (ctx) => CustomiseScreen(
+                                                imageUrl: widget
+                                                    .productData.images[0],
+                                                price: widget.productData.price,
+                                                name:
+                                                    widget.productData.name)));
                                   })
                             ],
                           ),

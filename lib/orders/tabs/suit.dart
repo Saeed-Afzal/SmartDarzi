@@ -102,30 +102,31 @@ class _SuitState extends State<Suit> {
                                       price: _productsData[index]['price'],
                                       press: () {
                                         Navigator.push(
-                                          context,
-                                          PageRouteBuilder(
-                                            transitionDuration: const Duration(
-                                                milliseconds: 500),
-                                            reverseTransitionDuration:
-                                                const Duration(
-                                                    milliseconds: 500),
-                                            pageBuilder: (context, animation,
-                                                    secondaryAnimation) =>
-                                                FadeTransition(
-                                              opacity: animation,
-                                              child: DetailsScreen(
-                                                productData: ProductData(
-                                                    images: List<String>.from(
-                                                        _productsData[index]
-                                                            ['image'])),
-                                                onProductAdd: () {
-                                                  controller.addProductToCart(
-                                                      demo_products[index]);
-                                                },
+                                            context,
+                                            PageRouteBuilder(
+                                              transitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 500),
+                                              reverseTransitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 500),
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
+                                                  FadeTransition(
+                                                opacity: animation,
+                                                child: ProductPage(
+                                                  productData: ProductData(
+                                                      name: _productsData[index]
+                                                          ['name'],
+                                                      price:
+                                                          _productsData[index]
+                                                              ['price'],
+                                                      images: List<String>.from(
+                                                          _productsData[index]
+                                                              ['image'])),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        );
+                                            ));
                                       },
                                     ),
                                   ),
