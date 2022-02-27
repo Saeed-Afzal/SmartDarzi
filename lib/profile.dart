@@ -189,6 +189,43 @@ File _imageFile;
     }
   }
 
+
+
+var name = 'Saeed Afzal';
+
+//editname
+  editName() async{
+    try{
+      await firestoreInstance.collection('userinfo').doc(auth.currentUser.uid).update(
+      {
+      
+        'name': name,
+  
+
+    }    );    
+    // Navigator.of(context).pop(userCus);
+
+    }catch(e){
+      print(e);
+    }
+    
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -347,8 +384,11 @@ File _imageFile;
                                                       ),
                                                     ),
                                                     IconButton(
-                                                      icon: const Icon(
-                                                          Icons.edit_outlined),
+                                                      icon: InkWell(
+                                                        onTap: editName,
+                                                        child: const Icon(
+                                                            Icons.edit_outlined),
+                                                      ),
                                                       onPressed: () {
                                                         // setState(() {
                                                         //   _volume += 10;

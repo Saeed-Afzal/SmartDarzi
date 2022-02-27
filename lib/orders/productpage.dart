@@ -16,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 //import 'package:geolocator/geolocator.dart';
 
 enum SingingCharacter { fabric, nofabric }
+String dropdownValue = 'One';
 
 class ProductPage extends StatefulWidget {
   ProductPage({Key key, @required this.productData}) : super(key: key);
@@ -89,39 +90,50 @@ class _ProductPageState extends State<ProductPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
-   onBackPressed() async{
-    try{
+  onBackPressed() async {
+    try {
       await firestoreInstance.collection('customize').doc(userCus).delete();
-
-    }catch(e){
+    } catch (e) {
       print(e);
     }
-    
   }
-  addUserProductData()async{
-    try{
-      var customizeData = await firestoreInstance.collection('customize').doc(userCus).get();
-      if(customizeData.data() == null){
-        firestoreInstance.collection('allorders').doc('${auth.currentUser.uid}${DateTime.now().toString()}').set({
-          'uid' : auth.currentUser.uid,
-          
+
+  addUserProductData() async {
+    try {
+      var sizeData = await firestoreInstance
+          .collection('user data')
+          .doc(auth.currentUser.uid)
+          .collection('Size Chart Data')
+          .doc('PUZM5qroLUR8nfQxdFY2')
+          .get();
+      var customizeData =
+          await firestoreInstance.collection('customize').doc(userCus).get();
+      if (customizeData.data() == null) {
+        firestoreInstance
+            .collection('allorders')
+            .doc('${auth.currentUser.uid}${DateTime.now().toString()}')
+            .set({
+          'uid': auth.currentUser.uid,
+          'productname': widget.productData.name,
+          'productprice': widget.productData.price,
+          ...sizeData.data(),
         });
-      }
-      else{
-        firestoreInstance.collection('allorders').doc('${auth.currentUser.uid}${DateTime.now().toString()}').set({
+      } else {
+        firestoreInstance
+            .collection('allorders')
+            .doc('${auth.currentUser.uid}${DateTime.now().toString()}')
+            .set({
+          ...sizeData.data(),
           ...customizeData.data(),
-          'uid' : auth.currentUser.uid,
-          
+          'uid': auth.currentUser.uid,
         });
       }
       // print(customizeData.data());
-      
-    }catch(e){
+
+    } catch (e) {
       print(e);
     }
   }
-
-
 
   // @override
   // void dispose() {
@@ -274,8 +286,8 @@ class _ProductPageState extends State<ProductPage> {
     Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () async {
-        onBackPressed(); // Action to perform on back pressed 
-            return false;
+        onBackPressed(); // Action to perform on back pressed
+        return false;
       },
       child: Scaffold(
         appBar: buildAppBar(),
@@ -289,7 +301,8 @@ class _ProductPageState extends State<ProductPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 10),
+                  margin:
+                      EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 10),
                   height: 360,
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -330,8 +343,8 @@ class _ProductPageState extends State<ProductPage> {
                                             _currentImage = page;
                                           });
                                         },
-                                        children:
-                                            widget.productData.images.map((path) {
+                                        children: widget.productData.images
+                                            .map((path) {
                                           return Center(
                                             child: Align(
                                               alignment: Alignment.centerRight,
@@ -342,8 +355,7 @@ class _ProductPageState extends State<ProductPage> {
                                                 child: FadeInImage.assetNetwork(
                                                   placeholder:
                                                       'assets/claZwr.gif',
-                                                  image:
-                                                      path,
+                                                  image: path,
                                                 ),
                                               ),
                                             ),
@@ -526,7 +538,7 @@ class _ProductPageState extends State<ProductPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       width: size.width * 1.0,
-                      height: 100,
+                      height: 180,
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -568,6 +580,31 @@ class _ProductPageState extends State<ProductPage> {
                                 },
                               ),
                             ),
+                          ),
+                          // DropdownButton<String>(
+                          //   value: dropdownValue,
+                          //   icon: const Icon(Icons.arrow_downward),
+                          //   elevation: 16,
+                          //   style: const TextStyle(color: Colors.deepPurple),
+                          //   underline: Container(
+                          //     height: 2,
+                          //     color: Colors.deepPurpleAccent,
+                          //   ),
+                          //   onChanged: (String newValue) {
+                          //     setState(() {
+                          //       dropdownValue = newValue;
+                          //     });
+                          //   },
+                          //   items: <String>['One', 'Two', 'Free', 'Four']
+                          //       .map<DropdownMenuItem<String>>((String value) {
+                          //     return DropdownMenuItem<String>(
+                          //       value: value,
+                          //       child: Text(value),
+                          //     );
+                          //   }).toList(),
+                          // ),
+                          SizedBox(
+                            height: 20,
                           ),
                         ],
                       ),
@@ -717,8 +754,8 @@ class _ProductPageState extends State<ProductPage> {
                             width: MediaQuery.of(context).size.width,
                             height: 180,
                             margin: EdgeInsets.all(10),
-                            padding:
-                                EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: AssetImage("assets/sideImage.jpg"),
@@ -736,7 +773,8 @@ class _ProductPageState extends State<ProductPage> {
                                 new Text(
                                   "For More Customization",
                                   style: TextStyle(
-                                      color: HexColor("#0071bc").withOpacity(0.8),
+                                      color:
+                                          HexColor("#0071bc").withOpacity(0.8),
                                       fontSize: 28.0,
                                       height: 1.4,
                                       fontWeight: FontWeight.w600),
@@ -760,11 +798,10 @@ class _ProductPageState extends State<ProductPage> {
                                             RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.zero,
                                                 side: BorderSide(
-                                                    color:
-                                                        HexColor("#0071bc"))))),
+                                                    color: HexColor("#0071bc"))))),
                                     onPressed: () async {
-                                    userCus = await  Navigator.of(context).push(
-                                          MaterialPageRoute(
+                                      userCus = await Navigator.of(context)
+                                          .push(MaterialPageRoute(
                                               builder: (ctx) =>
                                                   CustomiseScreen()));
                                     })
@@ -779,7 +816,8 @@ class _ProductPageState extends State<ProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(onPressed: addUserProductData, child: Text("CHECKOUT")),
+                ElevatedButton(
+                    onPressed: addUserProductData, child: Text("CHECKOUT")),
                 SizedBox(
                   height: 10,
                 ),
@@ -794,11 +832,10 @@ class _ProductPageState extends State<ProductPage> {
   AppBar buildAppBar() {
     return AppBar(
       leading: GestureDetector(
-        
-        onTap: (){
-          // Navigator.pop(context);
-        },
-        child: BackButton()),
+          onTap: () {
+            // Navigator.pop(context);
+          },
+          child: BackButton()),
       // backgroundColor: Color(0xFFF8F8F8),
       elevation: 0,
       centerTitle: true,
