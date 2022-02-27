@@ -816,6 +816,124 @@ class _ProductPageState extends State<ProductPage> {
                 SizedBox(
                   height: 10,
                 ),
+                Container(
+                  // width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: size.width * 1.0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          TextFormField(
+                            keyboardType: TextInputType.multiline,
+                            decoration: InputDecoration(
+                                prefixIcon: Padding(
+                                  padding: EdgeInsets.all(0.0),
+                                  child: Icon(Icons.comment,
+                                      size: 26.0, color: Colors.blue),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 25.0, horizontal: 10.0),
+                                hintText: "Breif Your Design Here",
+                                hintStyle: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                        new Radius.circular(5.0))),
+                                labelStyle: TextStyle(color: primaryColor)),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15.0,
+                            ),
+                            // controller: host,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "Empty value";
+                              }
+                            },
+                          )
+
+                          // Container(
+                          //   width: MediaQuery.of(context).size.width,
+                          //   height: 180,
+                          //   margin: EdgeInsets.all(10),
+                          //   padding: EdgeInsets.symmetric(
+                          //       vertical: 5, horizontal: 10),
+                          //   decoration: BoxDecoration(
+                          //     image: DecorationImage(
+                          //       image: AssetImage("assets/sideImage.jpg"),
+                          //       fit: BoxFit.cover,
+                          //       colorFilter: new ColorFilter.mode(
+                          //           Colors.black.withOpacity(0.4),
+                          //           BlendMode.dstATop),
+                          //     ),
+                          //     borderRadius: BorderRadius.circular(
+                          //         15), // Set rounded corner radius
+                          //   ),
+                          //   child: Column(
+                          //     mainAxisAlignment: MainAxisAlignment.center,
+                          //     children: [
+                          //       new Text(
+                          //         "For More Customization",
+                          //         style: TextStyle(
+                          //             color:
+                          //                 HexColor("#0071bc").withOpacity(0.8),
+                          //             fontSize: 28.0,
+                          //             height: 1.4,
+                          //             fontWeight: FontWeight.w600),
+                          //         textAlign: TextAlign.center,
+                          //       ),
+                          //       SizedBox(
+                          //         height: 10,
+                          //       ),
+                          //       OutlinedButton(
+                          //           child: Text("Click Here".toUpperCase(),
+                          //               style: TextStyle(fontSize: 14)),
+                          //           style: ButtonStyle(
+                          //               foregroundColor:
+                          //                   MaterialStateProperty.all<Color>(
+                          //                       Colors.white),
+                          //               backgroundColor:
+                          //                   MaterialStateProperty.all<Color>(
+                          //                       HexColor("#0071bc")),
+                          //               shape: MaterialStateProperty.all<
+                          //                       RoundedRectangleBorder>(
+                          //                   RoundedRectangleBorder(
+                          //                       borderRadius: BorderRadius.zero,
+                          //                       side: BorderSide(
+                          //                           color: HexColor("#0071bc"))))),
+                          //           onPressed: () async {
+                          //             userCus = await Navigator.of(context)
+                          //                 .push(MaterialPageRoute(
+                          //                     builder: (ctx) =>
+                          //                         CustomiseScreen()));
+                          //           })
+                          //     ],
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 ElevatedButton(
                     onPressed: addUserProductData, child: Text("CHECKOUT")),
                 SizedBox(

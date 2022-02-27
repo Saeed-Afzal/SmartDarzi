@@ -198,8 +198,11 @@ var name = 'Saeed Afzal';
     try{
       await firestoreInstance.collection('userinfo').doc(auth.currentUser.uid).update(
       {
+
+
+        
       
-        'name': name,
+        // 'name': name,
   
 
     }    );    
