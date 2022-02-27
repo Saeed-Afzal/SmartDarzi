@@ -28,7 +28,7 @@ class CustomiseScreen extends StatefulWidget {
 }
 
 class _CustomiseScreenState extends State<CustomiseScreen> {
-  final _preferenceService = SharedPref();
+  // final _preferenceService = SharedPref();
 
   //Position _currentPosition;
   String date = "";
@@ -86,7 +86,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
   void saveCustomization() {
     final dataView = Data(guid: "2321312312321", isCustomized: true);
     print("Save Customization");
-    _preferenceService.saveCustomization(dataView);
+    // _preferenceService.saveCustomization(dataView);
   }
 
   @override
