@@ -3,13 +3,17 @@
 // import 'dart:convert';
 // import 'dart:html';
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ecommerce_app/Screens/Component/AvatarWidget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 // import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatelessWidget {
@@ -30,22 +34,7 @@ class UserProfileData extends StatefulWidget {
   State<UserProfileData> createState() => _UserProfileDataState();
 }
 
-Future getUserData() async {
-  try {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    var users = await FirebaseFirestore.instance
-        .collection('userinfo')
-        .doc(auth.currentUser.uid)
-        .get();
-    return users;
-  } on FirebaseAuthException catch (e) {
-    print(e.message);
-    return [];
-  } catch (e) {
-    print(e);
-    return [];
-  }
-}
+
 
 // File _image;
 // final picker = ImagePicker();
@@ -76,7 +65,145 @@ Future getUserData() async {
 //   }
 // }
 
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
 class _UserProfileDataState extends State<UserProfileData> {
+  Future getUserData() async {
+  try {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var users = await FirebaseFirestore.instance
+        .collection('userinfo')
+        .doc(auth.currentUser.uid)
+        .get();
+    return users;
+  } on FirebaseAuthException catch (e) {
+    print(e.message);
+    return [];
+  } catch (e) {
+    print(e);
+    return [];
+  }
+}
+var pickedImageData;
+void _pickImageGallery() async {
+    final picker = ImagePicker();
+    try {
+      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+      final pickedImageFile = File(pickedImage.path);
+      setState(() {
+        pickedImageData = pickedImageFile;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Your image is selected',
+          style: TextStyle(color: Colors.white),
+        ),
+        duration: Duration(seconds: 2),
+      ));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          '$e',
+          style: TextStyle(color: Colors.white),
+        ),
+        duration: Duration(seconds: 2),
+      ));
+    }
+    // Navigator.pop(context);
+  }
+var _pickedImage;
+  void _remove() {
+    setState(() {
+      _pickedImage = null;
+    });
+    Navigator.pop(context);
+  }
+
+
+  var  imageUrl;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+addDataToDatabase() async {
+
+
+    // setState(() {
+    //   _isLoading = true;
+    // });
+    try {
+      String time = DateTime.now().toString();
+      var name = await firestoreInstance
+          .collection('userinfo')
+          .doc(auth.currentUser.uid)
+          .get();
+      if ((pickedImageData.toString().contains('/'))) {
+        var abc;
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('usersImages')
+            .child(name['name'] + '.jpg');
+        await ref.putFile(pickedImageData);
+        abc = await ref.getDownloadURL();
+        setState(() {
+          imageUrl = abc;
+        });
+      }
+      print('Outside of image url');
+      await firestoreInstance
+          .collection('userinfo')
+          .doc(auth.currentUser.uid) 
+          .set({
+            'image': imageUrl
+      });
+      // setState(() {
+      //   _isLoading = false;
+      // });
+      Navigator.of(context).pop();
+    } catch (e) {
+      print('$e');
+      // setState(() {
+      //   _isLoading = false;
+      // });
+    } finally {
+      // setState(() {
+      //   _isLoading = false;
+      // });
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -155,9 +282,12 @@ class _UserProfileDataState extends State<UserProfileData> {
                                   },
                                   child: CircleAvatar(
                                     radius: 15,
-                                    child: Icon(
-                                      Icons.edit,
-                                      size: 15,
+                                    child: InkWell(
+                                      onTap: _pickImageGallery,
+                                      child: Icon(
+                                        Icons.edit,
+                                        size: 15,
+                                      ),
                                     ),
                                   ),
                                 ),
