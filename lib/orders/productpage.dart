@@ -33,6 +33,7 @@ class _ProductPageState extends State<ProductPage> {
 
   int selectedRadio = 0;
   int _currentImage = 0;
+  var userCus = null;
 
   List<Widget> buildPageIndicator() {
     List<Widget> list = [];
@@ -85,8 +86,43 @@ class _ProductPageState extends State<ProductPage> {
   // String sizeIdOfSecondDropown;
   // bool _isLoading = false;
 
-  // FirebaseAuth auth = FirebaseAuth.instance;
-  // FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+
+   onBackPressed() async{
+    try{
+      await firestoreInstance.collection('customize').doc(userCus).delete();
+
+    }catch(e){
+      print(e);
+    }
+    
+  }
+  addUserProductData()async{
+    try{
+      var customizeData = await firestoreInstance.collection('customize').doc(userCus).get();
+      if(customizeData.data() == null){
+        firestoreInstance.collection('allorders').doc('${auth.currentUser.uid}${DateTime.now().toString()}').set({
+          'uid' : auth.currentUser.uid,
+          
+        });
+      }
+      else{
+        firestoreInstance.collection('allorders').doc('${auth.currentUser.uid}${DateTime.now().toString()}').set({
+          ...customizeData.data(),
+          'uid' : auth.currentUser.uid,
+          
+        });
+      }
+      // print(customizeData.data());
+      
+    }catch(e){
+      print(e);
+    }
+  }
+
+
+
   // @override
   // void dispose() {
   //   super.dispose();
@@ -236,497 +272,141 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: buildAppBar(),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _pickImageGallery,
-      //   child: Icon(Icons.link_outlined),
-      // ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                margin: EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 10),
-                height: 360,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Stack(
-                          // clipBehavior: Clip.none,
-                          // alignment: Alignment.center,
-                          children: [
-                            Container(
-                              // color: Color(0xFFF8F8F8),
-                              child: Stack(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(bottom: 25),
-                                    child: PageView(
-                                      physics: BouncingScrollPhysics(),
-                                      onPageChanged: (int page) {
-                                        setState(() {
-                                          _currentImage = page;
-                                        });
-                                      },
-                                      children:
-                                          widget.productData.images.map((path) {
-                                        return Center(
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child: Container(
-                                              height: size.height * 0.40,
-                                              margin:
-                                                  EdgeInsets.only(right: 100),
-                                              child: FadeInImage.assetNetwork(
-                                                placeholder:
-                                                    'assets/claZwr.gif',
-                                                image:
-                                                    path,
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                  widget.productData.images.length > 1
-                                      ? Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Container(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: buildPageIndicator(),
-                                            ),
-                                          ))
-                                      : Container(),
-                                ],
-                              ),
-                            ),
-                            // Positioned(
-                            //   bottom: -50,
-                            //   child: CartCounter(),
-                            // ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 18.0),
-                        child: Text(
-                          "Rs: ${widget.productData.price}",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 18.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "${widget.productData.name}",
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.favorite_outline,
-                                color: Colors.black,
-                                size: 26,
-                              ),
-                            ),
-                          ],
-                        ),
+    return WillPopScope(
+      onWillPop: () async {
+        onBackPressed(); // Action to perform on back pressed 
+            return false;
+      },
+      child: Scaffold(
+        appBar: buildAppBar(),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: _pickImageGallery,
+        //   child: Icon(Icons.link_outlined),
+        // ),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 10),
+                  height: 360,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
                       ),
                     ],
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(4),
-                      topRight: Radius.circular(4),
-                      bottomLeft: Radius.circular(4),
-                      bottomRight: Radius.circular(4)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: size.width * 1.0,
-                    height: 100,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
                     child: Column(
-                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Align(
-                          alignment: AlignmentDirectional(-0.85, 0),
-                          child: Text(
-                            'Fabric Details',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
                         Expanded(
-                          child: ListTile(
-                            title: const Text('I have fabric'),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.fabric,
-                              groupValue: _character,
-                              onChanged: (SingingCharacter value) {
-                                setState(() {
-                                  _character = value;
-                                });
-                              },
-                            ),
+                          child: Stack(
+                            // clipBehavior: Clip.none,
+                            // alignment: Alignment.center,
+                            children: [
+                              Container(
+                                // color: Color(0xFFF8F8F8),
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 25),
+                                      child: PageView(
+                                        physics: BouncingScrollPhysics(),
+                                        onPageChanged: (int page) {
+                                          setState(() {
+                                            _currentImage = page;
+                                          });
+                                        },
+                                        children:
+                                            widget.productData.images.map((path) {
+                                          return Center(
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                height: size.height * 0.40,
+                                                margin:
+                                                    EdgeInsets.only(right: 100),
+                                                child: FadeInImage.assetNetwork(
+                                                  placeholder:
+                                                      'assets/claZwr.gif',
+                                                  image:
+                                                      path,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                    widget.productData.images.length > 1
+                                        ? Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Container(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: buildPageIndicator(),
+                                              ),
+                                            ))
+                                        : Container(),
+                                  ],
+                                ),
+                              ),
+                              // Positioned(
+                              //   bottom: -50,
+                              //   child: CartCounter(),
+                              // ),
+                            ],
                           ),
                         ),
-                        Expanded(
-                          child: ListTile(
-                            title: const Text('I dont have fabric'),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.nofabric,
-                              groupValue: _character,
-                              onChanged: (SingingCharacter value) {
-                                setState(() {
-                                  _character = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: size.width * 1.0,
-                    height: 100,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Align(
-                          alignment: AlignmentDirectional(-0.85, 0),
-                          child: Text(
-                            'Size Details',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListTile(
-                            title: const Text('Pre Made Size'),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.fabric,
-                              groupValue: _character,
-                              onChanged: (SingingCharacter value) {
-                                setState(() {
-                                  _character = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListTile(
-                            title: const Text('Custom Size'),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.nofabric,
-                              groupValue: _character,
-                              onChanged: (SingingCharacter value) {
-                                setState(() {
-                                  _character = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: size.width * 1.0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Align(
-                          alignment: AlignmentDirectional(-0.85, 0),
-                          child: Text(
-                            'Delivery Date',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            _selectDate(context);
-                          },
-                          child: Text("Choose Date"),
-                        ),
-                        Text(
-                            "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"),
                         SizedBox(
                           height: 10,
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: size.width * 1.0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Align(
-                          alignment: AlignmentDirectional(-0.85, 0),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 18.0),
                           child: Text(
-                            'Delivery Details',
+                            "Rs: ${widget.productData.price}",
                             style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                               color: Colors.blue,
                             ),
                           ),
                         ),
-                        // SizedBox(
-                        //   height: 15,
-                        // ),
-                        // OutlinedButton(
-                        //   onPressed: () {
-                        //     debugPrint('Received click');
-                        //   },
-                        //   child: const Text('Click Me'),
-                        // ),
-                        // if (_currentPosition != null)
-                        //   Text(
-                        //       "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
-                        ElevatedButton(
-                          // style: style,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AddressList()),
-                            );
-                            //  _getCurrentLocation();
-                          },
-                          child: const Text('Select Address'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: size.width * 1.0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 180,
-                          margin: EdgeInsets.all(10),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/sideImage.jpg"),
-                              fit: BoxFit.cover,
-                              colorFilter: new ColorFilter.mode(
-                                  Colors.black.withOpacity(0.4),
-                                  BlendMode.dstATop),
-                            ),
-                            borderRadius: BorderRadius.circular(
-                                15), // Set rounded corner radius
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 18.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              new Text(
-                                "For More Customization",
+                              Text(
+                                "${widget.productData.name}",
                                 style: TextStyle(
-                                    color: HexColor("#0071bc").withOpacity(0.8),
-                                    fontSize: 28.0,
-                                    height: 1.4,
-                                    fontWeight: FontWeight.w600),
-                                textAlign: TextAlign.center,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
                               ),
-                              SizedBox(
-                                height: 10,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.favorite_outline,
+                                  color: Colors.black,
+                                  size: 26,
+                                ),
                               ),
-                              OutlinedButton(
-                                  child: Text("Click Here".toUpperCase(),
-                                      style: TextStyle(fontSize: 14)),
-                                  style: ButtonStyle(
-                                      foregroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.white),
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              HexColor("#0071bc")),
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.zero,
-                                              side: BorderSide(
-                                                  color:
-                                                      HexColor("#0071bc"))))),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (ctx) =>
-                                                CustomiseScreen()));
-                                  })
                             ],
                           ),
                         ),
@@ -734,11 +414,374 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-            ],
+                SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(4),
+                        topRight: Radius.circular(4),
+                        bottomLeft: Radius.circular(4),
+                        bottomRight: Radius.circular(4)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: size.width * 1.0,
+                      height: 100,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(-0.85, 0),
+                            child: Text(
+                              'Fabric Details',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: const Text('I have fabric'),
+                              leading: Radio<SingingCharacter>(
+                                value: SingingCharacter.fabric,
+                                groupValue: _character,
+                                onChanged: (SingingCharacter value) {
+                                  setState(() {
+                                    _character = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: const Text('I dont have fabric'),
+                              leading: Radio<SingingCharacter>(
+                                value: SingingCharacter.nofabric,
+                                groupValue: _character,
+                                onChanged: (SingingCharacter value) {
+                                  setState(() {
+                                    _character = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: size.width * 1.0,
+                      height: 100,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(-0.85, 0),
+                            child: Text(
+                              'Size Details',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: const Text('Pre Made Size'),
+                              leading: Radio<SingingCharacter>(
+                                value: SingingCharacter.fabric,
+                                groupValue: _character,
+                                onChanged: (SingingCharacter value) {
+                                  setState(() {
+                                    _character = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: const Text('Custom Size'),
+                              leading: Radio<SingingCharacter>(
+                                value: SingingCharacter.nofabric,
+                                groupValue: _character,
+                                onChanged: (SingingCharacter value) {
+                                  setState(() {
+                                    _character = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: size.width * 1.0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(-0.85, 0),
+                            child: Text(
+                              'Delivery Date',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              _selectDate(context);
+                            },
+                            child: Text("Choose Date"),
+                          ),
+                          Text(
+                              "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: size.width * 1.0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(-0.85, 0),
+                            child: Text(
+                              'Delivery Details',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                          // SizedBox(
+                          //   height: 15,
+                          // ),
+                          // OutlinedButton(
+                          //   onPressed: () {
+                          //     debugPrint('Received click');
+                          //   },
+                          //   child: const Text('Click Me'),
+                          // ),
+                          // if (_currentPosition != null)
+                          //   Text(
+                          //       "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
+                          ElevatedButton(
+                            // style: style,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddressList()),
+                              );
+                              //  _getCurrentLocation();
+                            },
+                            child: const Text('Select Address'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: size.width * 1.0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 180,
+                            margin: EdgeInsets.all(10),
+                            padding:
+                                EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage("assets/sideImage.jpg"),
+                                fit: BoxFit.cover,
+                                colorFilter: new ColorFilter.mode(
+                                    Colors.black.withOpacity(0.4),
+                                    BlendMode.dstATop),
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                  15), // Set rounded corner radius
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                new Text(
+                                  "For More Customization",
+                                  style: TextStyle(
+                                      color: HexColor("#0071bc").withOpacity(0.8),
+                                      fontSize: 28.0,
+                                      height: 1.4,
+                                      fontWeight: FontWeight.w600),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                OutlinedButton(
+                                    child: Text("Click Here".toUpperCase(),
+                                        style: TextStyle(fontSize: 14)),
+                                    style: ButtonStyle(
+                                        foregroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.white),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                HexColor("#0071bc")),
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.zero,
+                                                side: BorderSide(
+                                                    color:
+                                                        HexColor("#0071bc"))))),
+                                    onPressed: () async {
+                                    userCus = await  Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (ctx) =>
+                                                  CustomiseScreen()));
+                                    })
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(onPressed: addUserProductData, child: Text("Send"))
+              ],
+            ),
           ),
         ),
       ),

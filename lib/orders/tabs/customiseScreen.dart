@@ -41,6 +41,11 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
 
   int selectedRadio = 0;
   int _currentImage = 0;
+  var collarData = 'Shirt Collar';
+  var buttonStyle = 'Flat / Simple Button';
+  var damanDesign = 'Straight Daman';
+  var shalwarDesign = 'Simple Normal Design';
+
 
   List<dynamic> radioOption = [
     {"value": 1, "name": "Smart Sizes"},
@@ -69,8 +74,35 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
   String sizeIdOfSecondDropown;
   bool _isLoading = false;
 
+var userCus = DateTime.now().toString();
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+
+
+
+  addDataToDatabase() async{
+    try{
+      await firestoreInstance.collection('customize').doc(userCus).set(
+      {
+      'uid': auth.currentUser.uid,
+      'email': auth.currentUser.email,
+      'isCustomize': true,
+      'colar': collarData,
+      'daman': damanDesign,
+      'button': buttonStyle,
+      'shalwar': shalwarDesign,
+      'date': userCus,
+  
+
+    }    );    
+    Navigator.of(context).pop(userCus);
+
+    }catch(e){
+      print(e);
+    }
+    
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -93,7 +125,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(addDataToDatabase),
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -236,6 +268,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 groupValue: _collarcharacter,
                                 onChanged: (value) {
                                   setState(() {
+                                    collarData = 'Shirt collar';
                                     _collarcharacter = value;
                                   });
                                 },
@@ -247,7 +280,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 value: CollarCharacter.sherwani,
                                 groupValue: _collarcharacter,
                                 onChanged: (value) {
+                              
                                   setState(() {
+                                    collarData = 'Sherwani collar';
                                     _collarcharacter = value;
                                   });
                                 },
@@ -320,7 +355,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 value: ButtonCharacter.flat,
                                 groupValue: _btncharacter,
                                 onChanged: (value) {
+
                                   setState(() {
+                                    buttonStyle ='Flat / Simple button';
                                     _btncharacter = value;
                                   });
                                 },
@@ -333,6 +370,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 groupValue: _btncharacter,
                                 onChanged: (value) {
                                   setState(() {
+                                    buttonStyle ='Glass button';
                                     _btncharacter = value;
                                   });
                                 },
@@ -345,6 +383,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 groupValue: _btncharacter,
                                 onChanged: (value) {
                                   setState(() {
+                                    buttonStyle ='Leather Button';
                                     _btncharacter = value;
                                   });
                                 },
@@ -357,6 +396,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 groupValue: _btncharacter,
                                 onChanged: (value) {
                                   setState(() {
+                                    buttonStyle ='Lapple Button';
                                     _btncharacter = value;
                                   });
                                 },
@@ -427,6 +467,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 groupValue: _damancharacter,
                                 onChanged: (value) {
                                   setState(() {
+                                    damanDesign ='Rounded Daman';
                                     _damancharacter = value;
                                   });
                                 },
@@ -441,6 +482,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 groupValue: _damancharacter,
                                 onChanged: (value) {
                                   setState(() {
+                                    damanDesign ='Straight Daman';
                                     _damancharacter = value;
                                   });
                                 },
@@ -511,6 +553,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 groupValue: _shalwarcharacter,
                                 onChanged: (value) {
                                   setState(() {
+                                    shalwarDesign ='Simple Normal Design';
                                     _shalwarcharacter = value;
                                   });
                                 },
@@ -523,6 +566,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 groupValue: _shalwarcharacter,
                                 onChanged: (value) {
                                   setState(() {
+                                     shalwarDesign ='Trouser Design';
                                     _shalwarcharacter = value;
                                   });
                                 },
@@ -535,6 +579,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 groupValue: _shalwarcharacter,
                                 onChanged: (value) {
                                   setState(() {
+                                     shalwarDesign ='Straight Pant';
                                     _shalwarcharacter = value;
                                   });
                                 },
@@ -570,7 +615,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
     );
   }
 
-  AppBar buildAppBar() {
+  AppBar buildAppBar(addDataToDatabase) {
     return AppBar(
       leading: BackButton(),
       // backgroundColor: Color(0xFFF8F8F8),
@@ -583,7 +628,8 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
       actions: [
         GestureDetector(
           onTap: () {
-            saveCustomization();
+            addDataToDatabase();
+            // saveCustomization();
           },
           child: Icon(
             Icons.check,

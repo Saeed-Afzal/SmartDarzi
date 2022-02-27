@@ -11,10 +11,10 @@ class Sizec extends StatefulWidget {
 FirebaseAuth auth = FirebaseAuth.instance;
 
 class _SizecState extends State<Sizec> {
-  final Stream _usersStream = FirebaseFirestore.instance
+  final Future _usersStream = FirebaseFirestore.instance
       .collection('userdata')
       .doc(auth.currentUser.uid)
-      .snapshots();
+      .get();
   addDatatoDatabase() {
     FirebaseFirestore.instance
         .collection('userdata')
@@ -128,9 +128,9 @@ class _SizecState extends State<Sizec> {
               )),
         ],
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: _usersStream,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      body: FutureBuilder(
+        future: _usersStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Something went wrong'));
           }

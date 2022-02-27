@@ -113,15 +113,17 @@ class _SuitState extends State<Suit> {
                                                     secondaryAnimation) =>
                                                 FadeTransition(
                                               opacity: animation,
-                                              child: DetailsScreen(
-                                                productData: ProductData(
+                                              child: ProductPage(
+                                                productData: 
+                                                ProductData(
                                                     images: List<String>.from(
                                                         _productsData[index]
-                                                            ['image'])),
-                                                onProductAdd: () {
-                                                  controller.addProductToCart(
-                                                      demo_products[index]);
-                                                },
+                                                            ['image'])
+                                                            ),
+                                                // onProductAdd: () {
+                                                //   controller.addProductToCart(
+                                                //       demo_products[index]);
+                                                // },
                                               ),
                                             ),
                                           ),
