@@ -98,6 +98,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
         'date': userCus,
       });
       Navigator.of(context).pop(userCus);
+      Navigator.of(context).pop(userCus);
     } catch (e) {
       print(e);
     }
@@ -586,20 +587,20 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                   SizedBox(
                     height: 5,
                   ),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        //  addDataToDatabase();
-                      },
-                      child: _isLoading
-                          ? CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : Text("Proceed"),
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(340, 40), primary: Colors.blue),
-                    ),
-                  ),
+                  // Center(
+                  //   child: ElevatedButton(
+                  //     onPressed: () {
+                  //       //  addDataToDatabase();
+                  //     },
+                  //     child: _isLoading
+                  //         ? CircularProgressIndicator(
+                  //             color: Colors.white,
+                  //           )
+                  //         : Text("Proceed"),
+                  //     style: ElevatedButton.styleFrom(
+                  //         fixedSize: const Size(340, 40), primary: Colors.blue),
+                  //   ),
+                  // ),
                 ],
               ),
             ],
@@ -622,7 +623,29 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
       actions: [
         GestureDetector(
           onTap: () {
-            addDataToDatabase();
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text("Are you sure you want to proceed?"),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: const Text('Yes'),
+                      onPressed: () {
+                        addDataToDatabase();
+                      },
+                    )
+                  ],
+                );
+              },
+            );
             // saveCustomization();
           },
           child: Icon(
