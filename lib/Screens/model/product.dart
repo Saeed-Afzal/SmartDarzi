@@ -14,8 +14,9 @@ List<Product> demo_products = [
 class ProductData {
   String name;
   String price;
+  String des;
   List<String> images;
-  ProductData({this.name, this.price, this.images});
+  ProductData({this.name, this.price, this.images, this.des});
 }
 
 class DataList {
