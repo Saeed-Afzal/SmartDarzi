@@ -589,7 +589,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               Container(
                 width: double.infinity,
-                height: 250,
+                height: 300,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(),

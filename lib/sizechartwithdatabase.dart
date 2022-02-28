@@ -841,15 +841,16 @@ class _SizecState extends State<Sizec> {
       appBar: AppBar(
         title: const Text('Size Chart'),
         actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 10.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(
-                  Icons.delete_forever,
-                  size: 26.0,
-                ),
-              )),
+          // Padding(
+          //     padding: EdgeInsets.only(right: 10.0),
+          //     child: GestureDetector(
+          //       onTap: () {},
+          //       child: Icon(
+          //         Icons.delete_forever,
+          //         size: 26.0,
+          //       ),
+          //     )
+          //     ),
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
