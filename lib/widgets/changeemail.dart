@@ -1,85 +1,49 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_ecommerce_app/Screens/constant.dart';
-import 'package:flutter_ecommerce_app/widgets/emailWidget.dart';
-//import 'package:geolocator/geolocator.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
+// ignore: must_be_immutable
 class ChangeEmail extends StatefulWidget {
   String email;
-  ChangeEmail({
-    Key key,
-    this.email
-  }) : super(key: key);
+  ChangeEmail({Key key, this.email}) : super(key: key);
   @override
   _ChangeEmailState createState() => _ChangeEmailState();
 }
 
 class _ChangeEmailState extends State<ChangeEmail> {
-  TextEditingController EmailCont = new TextEditingController();
   // final _preferenceService = SharedPref();
- Future getUserData() async {
-    try {
-      FirebaseAuth auth = FirebaseAuth.instance;
-      var users = await FirebaseFirestore.instance
-          .collection('userinfo')
-          .doc(auth.currentUser.uid)
-          .get();
-      return users;
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
-      return [];
-    } catch (e) {
-      print(e);
-      return [];
-    }
-  }
-  //Position _currentPosition;
-  String date = "";
-  DateTime selectedDate = DateTime.now();
-
-  var userCus = DateTime.now().toString();
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
-  // addDataToDatabase() async {
-  //   try {
-  //     await firestoreInstance.collection('customize').doc(userCus).set({
-  //       'uid': auth.currentUser.uid,
-  //       'email': auth.currentUser.email,
-  //       'isCustomize': true,
-  //       'colar': collarData,
-  //       'daman': damanDesign,
-  //       'button': buttonStyle,
-  //       'shalwar': shalwarDesign,
-  //       'date': userCus,
-  //     });
-  //     Navigator.of(context).pop(userCus);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+  final email = TextEditingController();
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   addressController.dispose();
-  //   mySizeValue = '';
-  // }
+  editName() async {
+    try {
+      await firestoreInstance
+          .collection('userinfo')
+          .doc(auth.currentUser.uid)
+          .update({
+        'email': email.text,
+      });
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void dispose() {
+    super.dispose();
+    email.dispose();
+  }
 
   @override
   void initState() {
-    // eemail.text = widget.email;
+    email.text = widget.email;
     super.initState();
-  }
-
-  void saveCustomization() {
-    // final dataView = Data(guid: "2321312312321", isCustomized: true);
-    print("Save Customization");
-    // _preferenceService.saveCustomization(dataView);
   }
 
   @override
@@ -103,9 +67,9 @@ class _ChangeEmailState extends State<ChangeEmail> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child:TextField(
+                  child: TextField(
                     keyboardType: TextInputType.emailAddress,
-                    controller: EmailCont,
+                    controller: email,
                     decoration: InputDecoration(
                       fillColor: Colors.blue.shade100,
                       border: OutlineInputBorder(),
@@ -135,13 +99,28 @@ class _ChangeEmailState extends State<ChangeEmail> {
         GestureDetector(
           onTap: () {
             showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    content: Text(EmailCont.text),
-                  );
-                },
-              );
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text("Are you sure you want to proceed?"),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: const Text('Yes'),
+                      onPressed: () {
+                        editName();
+                      },
+                    )
+                  ],
+                );
+              },
+            );
           },
           child: Icon(
             Icons.check,
