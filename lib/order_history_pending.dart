@@ -20,7 +20,7 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
       .snapshots();
   @override
   Widget build(BuildContext context) {
-      Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
 
     return StreamBuilder(
         stream: _userOrderStream,
@@ -53,7 +53,8 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                                   // margin: EdgeInsets.only(right: 50),
                                   child: FadeInImage.assetNetwork(
                                     placeholder: imageLoading,
-                                    image: snapshot.data.docs[index]['productimage'][0],
+                                    image: snapshot.data.docs[index]
+                                        ['productimage'][0],
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -84,7 +85,10 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          "08th Feb 22 at 10:29PM",
+                                          dateTimeFormat
+                                              .format(DateTime.parse(snapshot
+                                                  .data.docs[index]['date']))
+                                              .toString(),
                                           style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w800,
@@ -96,7 +100,9 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: Text(
-                                          "Order Ref:",
+                                          "Product Name " +
+                                              snapshot.data.docs[index]
+                                                  ['productname'],
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
@@ -108,7 +114,9 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: Text(
-                                          "Total: Rs. 3,127.00",
+                                          "Total: Rs. " +
+                                              snapshot.data.docs[index]
+                                                  ['price'],
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,

@@ -25,11 +25,13 @@ class CustomiseScreen extends StatefulWidget {
   String name;
   String imageUrl;
   String price;
+  String description;
   CustomiseScreen({
     Key key,
     @required this.name,
     @required this.imageUrl,
     @required this.price,
+    @required this.description,
   }) : super(key: key);
   @override
   _CustomiseScreenState createState() => _CustomiseScreenState();
@@ -182,7 +184,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "Zinger Burger, fries & 250ml soft drink can",
+                          widget.description,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.normal,
@@ -268,7 +270,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: Icon(Icons.star)),
+                              trailing: CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/shirtt.png'))),
                           ListTile(
                               title: Text("Sherwani Collar"),
                               leading: Radio(
@@ -281,7 +285,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: Icon(Icons.star))
+                              trailing: CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/kurta.png')))
                         ],
                       ),
                     ),
@@ -381,7 +387,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: Icon(Icons.star)),
+                              trailing: CircleAvatar(
+                                  // backgroundImage: AssetImage('assets/horse.png')
+                                  )),
                           ListTile(
                               title: Text("Lapple Buttons"),
                               leading: Radio(
@@ -465,11 +473,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: Icon(Icons.star)
-                              // CircleAvatar(
-                              //     backgroundImage: NetworkImage(
-                              //         "https://images.unsplash.com/photo-1547721064-da6cfb341d50"))
-                              ),
+                              trailing: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      "https://images.unsplash.com/photo-1547721064-da6cfb341d50"))),
                           ListTile(
                               title: Text("Straight Daman"),
                               leading: Radio(

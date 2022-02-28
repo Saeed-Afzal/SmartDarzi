@@ -921,6 +921,7 @@ class _ProductPageState extends State<ProductPage> {
                                                   name: widget.productData.name,
                                                   price:
                                                       widget.productData.price,
+                                                      description: widget.productData.des,
                                                 )));
                                   })
                             ],
@@ -934,63 +935,6 @@ class _ProductPageState extends State<ProductPage> {
               SizedBox(
                 height: 10,
               ),
-              // Container(
-              //   // width: double.infinity,
-              //   decoration: BoxDecoration(
-              //     color: Colors.white,
-              //     borderRadius: BorderRadius.only(),
-              //     boxShadow: [
-              //       BoxShadow(
-              //         color: Colors.grey.withOpacity(0.5),
-              //         spreadRadius: 5,
-              //         blurRadius: 7,
-              //         offset: Offset(0, 3), // changes position of shadow
-              //       ),
-              //     ],
-              //   ),
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(8.0),
-              //     child: Container(
-              //       width: size.width * 1.0,
-              //       child: Column(
-              //         mainAxisSize: MainAxisSize.max,
-              //         children: [
-              //           TextFormField(
-              //             controller: comments,
-              //             keyboardType: TextInputType.multiline,
-              //             decoration: InputDecoration(
-              //                 prefixIcon: Padding(
-              //                   padding: EdgeInsets.all(0.0),
-              //                   child: Icon(Icons.comment,
-              //                       size: 26.0, color: Colors.blue),
-              //                 ),
-              //                 contentPadding: const EdgeInsets.symmetric(
-              //                     vertical: 25.0, horizontal: 10.0),
-              //                 hintText: "Breif Your Design Here",
-              //                 hintStyle: TextStyle(
-              //                     color: Colors.blue,
-              //                     fontWeight: FontWeight.bold),
-              //                 border: OutlineInputBorder(
-              //                     borderRadius: BorderRadius.all(
-              //                         new Radius.circular(5.0))),
-              //                 labelStyle: TextStyle(color: primaryColor)),
-              //             textAlign: TextAlign.center,
-              //             style: TextStyle(
-              //               color: Colors.black,
-              //               fontSize: 15.0,
-              //             ),
-              //             // controller: host,
-              //             validator: (value) {
-              //               if (value.isEmpty) {
-              //                 return "Empty value";
-              //               }
-              //             },
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
               SizedBox(
                 height: 10,
               ),
