@@ -11,10 +11,9 @@ class OrderHistoryCancelled extends StatefulWidget {
 
 class _OrderHistoryCancelledState extends State<OrderHistoryCancelled> {
   final Stream<QuerySnapshot> _userOrderStream = FirebaseFirestore.instance
-      .collection("userorder")
-      .doc(auth.currentUser.uid)
-      .collection('product')
-      .where("isCancelled", isEqualTo: true)
+      .collection("allorders")
+      .where('uid', isEqualTo: '${auth.currentUser.uid}')
+      .where("status", isEqualTo: 'cancelled')
       .snapshots();
   @override
   Widget build(BuildContext context) {
@@ -51,7 +50,7 @@ class _OrderHistoryCancelledState extends State<OrderHistoryCancelled> {
                             'Cancelled',
                           ),
                           title: Text(
-                              '${snapshot.data.docs[index]['product name']}'),
+                              '${snapshot.data.docs[index]['productname']}'),
                         );
                       });
             } else {

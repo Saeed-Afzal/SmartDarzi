@@ -13,10 +13,9 @@ FirebaseAuth auth = FirebaseAuth.instance;
 
 class _OrderHistoryPendingState extends State<OrderHistoryPending> {
   final Stream<QuerySnapshot> _userOrderStream = FirebaseFirestore.instance
-      .collection("userorder")
-      .doc(auth.currentUser.uid)
-      .collection('product')
-      .where("isPending", isEqualTo: true)
+      .collection("allorders")
+      .where('uid', isEqualTo: '${auth.currentUser.uid}')
+      .where("status", isEqualTo: 'pending')
       .snapshots();
   @override
   Widget build(BuildContext context) {
@@ -54,7 +53,9 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                             style: TextStyle(color: Colors.red),
                           ),
                           title: Text(
-                              '${snapshot.data.docs[index]['product name']}'),
+                              '${snapshot.data.docs[index]['productname']}'
+                              // 'Hi'
+                              ),
                         );
                       });
             } else {

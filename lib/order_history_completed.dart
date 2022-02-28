@@ -11,10 +11,9 @@ class OrderHistoryCompleted extends StatefulWidget {
 
 class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
   final Stream<QuerySnapshot> _userOrderStream = FirebaseFirestore.instance
-      .collection("userorder")
-      .doc(auth.currentUser.uid)
-      .collection('product')
-      .where("isCompleted", isEqualTo: true)
+      .collection("allorders")
+      .where('uid',isEqualTo: '${auth.currentUser.uid}')
+      .where("status", isEqualTo: 'completed')
       .snapshots();
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
                             style: TextStyle(color: Colors.green),
                           ),
                           title: Text(
-                              '${snapshot.data.docs[index]['product name']}'),
+                              '${snapshot.data.docs[index]['productname']}'),
                         );
                       });
             } else {
