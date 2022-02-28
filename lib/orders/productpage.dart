@@ -197,6 +197,8 @@ class _ProductPageState extends State<ProductPage> {
         });
       }
       print(customizeData.data());
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
     } catch (e) {
       print(e);
     }
@@ -1091,7 +1093,32 @@ class _ProductPageState extends State<ProductPage> {
                           width: 350.0,
                           height: 40,
                           child: ElevatedButton(
-                              onPressed: addUserProductData,
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Text(
+                                          "Are you sure you want to proceed?"),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text('Cancel'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: const Text('Yes'),
+                                          onPressed: () {
+                                            addUserProductData();
+                                          },
+                                        )
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                               child: Text("PLACE ORDER")),
                         ),
                       ],
