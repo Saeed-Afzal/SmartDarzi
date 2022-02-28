@@ -21,7 +21,22 @@ class ChangeEmail extends StatefulWidget {
 class _ChangeEmailState extends State<ChangeEmail> {
   TextEditingController EmailCont = new TextEditingController();
   // final _preferenceService = SharedPref();
-
+ Future getUserData() async {
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      var users = await FirebaseFirestore.instance
+          .collection('userinfo')
+          .doc(auth.currentUser.uid)
+          .get();
+      return users;
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
   //Position _currentPosition;
   String date = "";
   DateTime selectedDate = DateTime.now();
@@ -57,7 +72,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
 
   @override
   void initState() {
-    EmailCont.text = widget.email;
+    // eemail.text = widget.email;
     super.initState();
   }
 

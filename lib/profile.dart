@@ -182,23 +182,23 @@ class _UserProfileDataState extends State<UserProfileData> {
     }
   }
 
-  var name = 'Saeed Afzal';
+  // var name = 'Saeed Afzal';
 
 //editname
-  editName() async {
-    try {
-      await firestoreInstance
-          .collection('userinfo')
-          .doc(auth.currentUser.uid)
-          .update({
-        // 'name': name,
-      });
-      // Navigator.of(context).pop(userCus);
+  // editName() async {
+  //   try {
+  //     await firestoreInstance
+  //         .collection('userinfo')
+  //         .doc(auth.currentUser.uid)
+  //         .update({
+  //       // 'name': name,
+  //     });
+  //     // Navigator.of(context).pop(userCus);
 
-    } catch (e) {
-      print(e);
-    }
-  }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

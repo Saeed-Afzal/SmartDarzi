@@ -18,6 +18,26 @@ class ChangeName extends StatefulWidget {
 class _ChangeNameState extends State<ChangeName> {
   TextEditingController nameField = new TextEditingController();
   // final _preferenceService = SharedPref();
+  Future getUserData() async {
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      var users = await FirebaseFirestore.instance
+          .collection('userinfo')
+          .doc(auth.currentUser.uid)
+          .get();
+      return users;
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+
+
+
 
   //Position _currentPosition;
   String date = "";
@@ -54,7 +74,7 @@ class _ChangeNameState extends State<ChangeName> {
 
   @override
   void initState() {
-    nameField.text = widget.name;
+    ename.text = widget.name;
     super.initState();
   }
 
@@ -63,6 +83,37 @@ class _ChangeNameState extends State<ChangeName> {
     print("Save Customization");
     // _preferenceService.saveCustomization(dataView);
   }
+//edit name
+
+ final ename= TextEditingController();
+
+
+  editName() async {
+    try {
+      await firestoreInstance
+          .collection('userinfo')
+          .doc(auth.currentUser.uid)
+          .update({
+        'name': ename.text,
+      });
+      // Navigator.of(context).pop(userCus);
+
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // @override
+  void dispose() {
+    super.dispose();
+    // addressController.dispose();
+    ename.dispose();
+
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +138,7 @@ class _ChangeNameState extends State<ChangeName> {
                   padding: const EdgeInsets.all(16.0),
                   child: TextField(
                     keyboardType: TextInputType.text,
-                    controller: nameField,
+                    controller: ename,
                     decoration: InputDecoration(
                       fillColor: Colors.blue.shade100,
                       border: OutlineInputBorder(),
@@ -116,21 +167,23 @@ class _ChangeNameState extends State<ChangeName> {
       actions: [
         GestureDetector(
           onTap: () {
-            // addDataToDatabase();
+            editName();
+            // print(ename);
             // saveCustomization();
           },
           child: GestureDetector(
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    // Retrieve the text the that user has entered by using the
-                    // TextEditingController.
-                    content: Text(nameField.text),
-                  );
-                },
-              );
+              editName();
+              // showDialog(
+              //   context: context,
+              //   builder: (context) {
+              //     return AlertDialog(
+              //       // Retrieve the text the that user has entered by using the
+              //       // TextEditingController.
+              //       content: Text(nameField.text),
+              //     );
+              //   },
+              // );
             },
             child: Icon(
               Icons.check,

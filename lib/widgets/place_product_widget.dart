@@ -13,7 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/sizechartwithdatabase.dart';
 
-var mySizeValue = '';
+var mySizeValue;
 
 class PlaceProductWidget extends StatefulWidget {
   const PlaceProductWidget({Key key}) : super(key: key);
@@ -28,7 +28,7 @@ class _PlaceProductWidgetState extends State<PlaceProductWidget> {
   @override
   void initState() {
     super.initState();
-    mySizeValue = '';
+    mySizeValue ;
   }
 
   var v;

@@ -86,7 +86,7 @@ class _ProductPageState extends State<ProductPage> {
   File pickedImageData;
   String imageUrl = 'No image to show';
 
-  String sizeTypeIdFirstDropdown = '1';
+  String sizeTypeIdFirstDropdown = '2';
   String sizeIdOfFirstDropdown;
   String sizeTypeIdSecondDropdown;
   String sizeIdOfSecondDropown;
@@ -102,9 +102,9 @@ class _ProductPageState extends State<ProductPage> {
       print(e);
     }
   }
-
+var sizee = 'asas';
   addUserProductData() async {
-    if (sizeTypeIdFirstDropdown == '2') {
+    if (sizeTypeIdFirstDropdown == '1') {
       if (mySizeValue == '') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
@@ -136,16 +136,16 @@ class _ProductPageState extends State<ProductPage> {
           .collection('user data')
           .doc(auth.currentUser.uid)
           .collection('Size Chart Data')
-          .doc(auth.currentUser.uid)
-          .get();
+           .where("size name", isEqualTo: sizee)
+      .snapshots();
       var customizeData =
           await firestoreInstance.collection('customize').doc(userCus).get();
           if ((pickedImageData.toString().contains('/'))) {
         var abc;
         final ref = FirebaseStorage.instance
             .ref()
-            .child('usersImages')
-            .child(sizeData['name'] + '.jpg');
+            .child('usersImages');
+            // .child(sizeData['name'] + '.jpg');
         await ref.putFile(pickedImageData);
         abc = await ref.getDownloadURL();
         setState(() {
@@ -153,6 +153,9 @@ class _ProductPageState extends State<ProductPage> {
         });
       }
       print('Outside of image url');
+
+    
+
       if (customizeData.data() == null) {
         firestoreInstance
             .collection('allorders')
@@ -163,7 +166,7 @@ class _ProductPageState extends State<ProductPage> {
           'productname': widget.productData.name,
           'productprice': widget.productData.price,
           'productimage': widget.productData.images,
-          ...sizeData.data(),
+          // ...sizeData.data(),
           'status': 'pending',
           'deliverydate': deliveryData,
           'comment': comments.text,
@@ -179,7 +182,7 @@ class _ProductPageState extends State<ProductPage> {
             .doc('${auth.currentUser.uid}${DateTime.now().toString()}')
             .set({
           'fabric': fabricData,
-          ...sizeData.data(),
+          // ...sizeData.data(),
           ...customizeData.data(),
           'uid': auth.currentUser.uid,
           'productimage': widget.productData.images,
@@ -192,7 +195,7 @@ class _ProductPageState extends State<ProductPage> {
           'sizename': mySizeValue,
         });
       }
-      // print(customizeData.data());
+       print(customizeData.data());
 
     } catch (e) {
       print(e);
@@ -207,32 +210,32 @@ class _ProductPageState extends State<ProductPage> {
     mySizeValue = '';
   }
 
-  void _pickImageGallery() async {
-    final picker = ImagePicker();
-    try {
-      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-      final pickedImageFile = File(pickedImage.path);
-      setState(() {
-        pickedImageData = pickedImageFile;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          'Your image is selected',
-          style: TextStyle(color: Colors.white),
-        ),
-        duration: Duration(seconds: 2),
-      ));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          '$e',
-          style: TextStyle(color: Colors.white),
-        ),
-        duration: Duration(seconds: 2),
-      ));
-    }
-    // Navigator.pop(context);
-  }
+  // void _pickImageGallery() async {
+  //   final picker = ImagePicker();
+  //   try {
+  //     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+  //     final pickedImageFile = File(pickedImage.path);
+  //     setState(() {
+  //       pickedImageData = pickedImageFile;
+  //     });
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //       content: Text(
+  //         'Your image is selected',
+  //         style: TextStyle(color: Colors.white),
+  //       ),
+  //       duration: Duration(seconds: 2),
+  //     ));
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //       content: Text(
+  //         '$e',
+  //         style: TextStyle(color: Colors.white),
+  //       ),
+  //       duration: Duration(seconds: 2),
+  //     ));
+  //   }
+  //   // Navigator.pop(context);
+  // }
 
   // void _remove() {
   //   setState(() {
@@ -1065,6 +1068,7 @@ class _ProductPageState extends State<ProductPage> {
                           height: 10,
                         ),
                         TextFormField(
+                          controller: comments,
                             minLines:
                                 6, // any number you need (It works as the rows for the textarea)
                             keyboardType: TextInputType.multiline,
