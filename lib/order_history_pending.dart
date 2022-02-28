@@ -42,19 +42,93 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                   : ListView.builder(
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (ctx, index) {
-                        return ListTile(
-                          leading: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        return Card(
+                          child: Column(
                             children: [
-                              Text('${index + 1}'),
+                              Card(
+                                child: Image.asset(
+                                  'assets/1.png',
+                                  fit: BoxFit.cover,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                elevation: 5,
+                              ),
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Divider(
+                                height: 5,
+                                thickness: 2,
+                                indent: 0,
+                                endIndent: 0,
+                                color: Colors.black,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          "08th Feb 22 at 10:29PM",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          "Order Ref:",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black26,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          "Total: Rs. 3,127.00",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black26,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Chip(
+                                      label: const Text(
+                                        'Completed',
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 14),
+                                      ),
+                                      backgroundColor: Colors.blue[100],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
                             ],
                           ),
-                          trailing: Text(
-                            'Pending',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                          title: Text(
-                              '${snapshot.data.docs[index]['product name']}'),
                         );
                       });
             } else {

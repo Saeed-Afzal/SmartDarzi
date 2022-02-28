@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_app/Screens/constant.dart';
 import 'package:flutter_ecommerce_app/order_history_pending.dart';
 
 class OrderHistoryCompleted extends StatefulWidget {
@@ -16,6 +17,8 @@ class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
       .collection('product')
       .where("isCompleted", isEqualTo: true)
       .snapshots();
+
+  void populateDate(value) {}
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -40,19 +43,97 @@ class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
                   : ListView.builder(
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (ctx, index) {
-                        return ListTile(
-                          leading: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        return Card(
+                          child: Column(
                             children: [
-                              Text('${index + 1}'),
+                              Card(
+                                child: Image.asset(
+                                  'assets/1.png',
+                                  fit: BoxFit.cover,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                elevation: 5,
+                              ),
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Divider(
+                                height: 5,
+                                thickness: 2,
+                                indent: 0,
+                                endIndent: 0,
+                                color: Colors.black,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          dateTimeFormat
+                                              .format(DateTime.parse(snapshot
+                                                  .data
+                                                  .docs[index]['order placed']))
+                                              .toString(),
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          "Order Ref:",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black26,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          "Total: Rs. 3,127.00",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black26,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Chip(
+                                      label: const Text(
+                                        'Completed',
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 14),
+                                      ),
+                                      backgroundColor: Colors.green[200],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
                             ],
                           ),
-                          trailing: Text(
-                            'Completed',
-                            style: TextStyle(color: Colors.green),
-                          ),
-                          title: Text(
-                              '${snapshot.data.docs[index]['product name']}'),
                         );
                       });
             } else {

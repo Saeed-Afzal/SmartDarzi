@@ -11,7 +11,7 @@ class orderHistory extends StatelessWidget {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Order Hstory'),
+            title: Text('Order History'),
             centerTitle: true,
             bottom: TabBar(
               tabs: [

@@ -54,7 +54,6 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
   var damanDesign = 'Straight Daman';
   var shalwarDesign = 'Simple Normal Design';
 
-
   List<dynamic> radioOption = [
     {"value": 1, "name": "Smart Sizes"},
     {"value": 2, "name": "My Sizes"}
@@ -82,34 +81,26 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
   String sizeIdOfSecondDropown;
   bool _isLoading = false;
 
-var userCus = DateTime.now().toString();
+  var userCus = DateTime.now().toString();
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
-
-
-  addDataToDatabase() async{
-    try{
-      await firestoreInstance.collection('customize').doc(userCus).set(
-      {
-      'uid': auth.currentUser.uid,
-      'email': auth.currentUser.email,
-      'isCustomize': true,
-      'colar': collarData,
-      'daman': damanDesign,
-      'button': buttonStyle,
-      'shalwar': shalwarDesign,
-      'date': userCus,
-    
-  
-
-    }    );    
-    Navigator.of(context).pop(userCus);
-
-    }catch(e){
+  addDataToDatabase() async {
+    try {
+      await firestoreInstance.collection('customize').doc(userCus).set({
+        'uid': auth.currentUser.uid,
+        'email': auth.currentUser.email,
+        'isCustomize': true,
+        'colar': collarData,
+        'daman': damanDesign,
+        'button': buttonStyle,
+        'shalwar': shalwarDesign,
+        'date': userCus,
+      });
+      Navigator.of(context).pop(userCus);
+    } catch (e) {
       print(e);
     }
-    
   }
 
   @override
@@ -283,7 +274,6 @@ var userCus = DateTime.now().toString();
                                 value: CollarCharacter.sherwani,
                                 groupValue: _collarcharacter,
                                 onChanged: (value) {
-                              
                                   setState(() {
                                     collarData = 'Sherwani collar';
                                     _collarcharacter = value;
@@ -358,9 +348,8 @@ var userCus = DateTime.now().toString();
                                 value: ButtonCharacter.flat,
                                 groupValue: _btncharacter,
                                 onChanged: (value) {
-
                                   setState(() {
-                                    buttonStyle ='Flat / Simple button';
+                                    buttonStyle = 'Flat / Simple button';
                                     _btncharacter = value;
                                   });
                                 },
@@ -373,7 +362,7 @@ var userCus = DateTime.now().toString();
                                 groupValue: _btncharacter,
                                 onChanged: (value) {
                                   setState(() {
-                                    buttonStyle ='Glass button';
+                                    buttonStyle = 'Glass button';
                                     _btncharacter = value;
                                   });
                                 },
@@ -386,7 +375,7 @@ var userCus = DateTime.now().toString();
                                 groupValue: _btncharacter,
                                 onChanged: (value) {
                                   setState(() {
-                                    buttonStyle ='Leather Button';
+                                    buttonStyle = 'Leather Button';
                                     _btncharacter = value;
                                   });
                                 },
@@ -399,7 +388,7 @@ var userCus = DateTime.now().toString();
                                 groupValue: _btncharacter,
                                 onChanged: (value) {
                                   setState(() {
-                                    buttonStyle ='Lapple Button';
+                                    buttonStyle = 'Lapple Button';
                                     _btncharacter = value;
                                   });
                                 },
@@ -470,14 +459,16 @@ var userCus = DateTime.now().toString();
                                 groupValue: _damancharacter,
                                 onChanged: (value) {
                                   setState(() {
-                                    damanDesign ='Rounded Daman';
+                                    damanDesign = 'Rounded Daman';
                                     _damancharacter = value;
                                   });
                                 },
                               ),
-                              trailing: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      "https://images.unsplash.com/photo-1547721064-da6cfb341d50"))),
+                              trailing: Icon(Icons.star)
+                              // CircleAvatar(
+                              //     backgroundImage: NetworkImage(
+                              //         "https://images.unsplash.com/photo-1547721064-da6cfb341d50"))
+                              ),
                           ListTile(
                               title: Text("Straight Daman"),
                               leading: Radio(
@@ -485,7 +476,7 @@ var userCus = DateTime.now().toString();
                                 groupValue: _damancharacter,
                                 onChanged: (value) {
                                   setState(() {
-                                    damanDesign ='Straight Daman';
+                                    damanDesign = 'Straight Daman';
                                     _damancharacter = value;
                                   });
                                 },
@@ -556,7 +547,7 @@ var userCus = DateTime.now().toString();
                                 groupValue: _shalwarcharacter,
                                 onChanged: (value) {
                                   setState(() {
-                                    shalwarDesign ='Simple Normal Design';
+                                    shalwarDesign = 'Simple Normal Design';
                                     _shalwarcharacter = value;
                                   });
                                 },
@@ -569,7 +560,7 @@ var userCus = DateTime.now().toString();
                                 groupValue: _shalwarcharacter,
                                 onChanged: (value) {
                                   setState(() {
-                                     shalwarDesign ='Trouser Design';
+                                    shalwarDesign = 'Trouser Design';
                                     _shalwarcharacter = value;
                                   });
                                 },
@@ -582,7 +573,7 @@ var userCus = DateTime.now().toString();
                                 groupValue: _shalwarcharacter,
                                 onChanged: (value) {
                                   setState(() {
-                                     shalwarDesign ='Straight Pant';
+                                    shalwarDesign = 'Straight Pant';
                                     _shalwarcharacter = value;
                                   });
                                 },

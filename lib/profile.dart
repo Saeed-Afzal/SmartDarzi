@@ -12,6 +12,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ecommerce_app/Screens/Component/AvatarWidget.dart';
+import 'package:flutter_ecommerce_app/widgets/ChangePassword.dart';
+import 'package:flutter_ecommerce_app/widgets/changeemail.dart';
+import 'package:flutter_ecommerce_app/widgets/changename.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 // import 'package:image_picker/image_picker.dart';
@@ -81,11 +84,6 @@ class _UserProfileDataState extends State<UserProfileData> {
     }
   }
 
-
-
-
-
-
   var pickedImageData;
   void _pickImageGallery() async {
     final picker = ImagePicker();
@@ -116,7 +114,7 @@ class _UserProfileDataState extends State<UserProfileData> {
     // Navigator.pop(context);
   }
 
-final picker = ImagePicker();
+  final picker = ImagePicker();
 
   Future pickImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -125,11 +123,8 @@ final picker = ImagePicker();
       File _imageFile = File(pickedFile.path);
     });
   }
-File _imageFile;
 
-
-
-
+  File _imageFile;
 
   var _pickedImage;
   void _remove() {
@@ -137,7 +132,6 @@ File _imageFile;
       _pickedImage = null;
     });
     Navigator.pop(context);
-
   }
 
   var imageUrl;
@@ -176,7 +170,6 @@ File _imageFile;
       //   _isLoading = false;
       // });
       Navigator.of(context).pop();
-
     } catch (e) {
       print('$e');
       // setState(() {
@@ -189,45 +182,23 @@ File _imageFile;
     }
   }
 
-
-
-var name = 'Saeed Afzal';
+  var name = 'Saeed Afzal';
 
 //editname
-  editName() async{
-    try{
-      await firestoreInstance.collection('userinfo').doc(auth.currentUser.uid).update(
-      {
-
-
-        
-      
+  editName() async {
+    try {
+      await firestoreInstance
+          .collection('userinfo')
+          .doc(auth.currentUser.uid)
+          .update({
         // 'name': name,
-  
+      });
+      // Navigator.of(context).pop(userCus);
 
-    }    );    
-    // Navigator.of(context).pop(userCus);
-
-    }catch(e){
+    } catch (e) {
       print(e);
     }
-    
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -276,35 +247,21 @@ var name = 'Saeed Afzal';
                           ),
                           Container(
                             child: Stack(children: [
-                              AvatarWidget(
-                                  radius: 60, name: snapshot.data['name']),
+                              snapshot.data['image'] == null
+                                  ? AvatarWidget(
+                                      radius: 60, name: snapshot.data['name'])
+                                  : CircleAvatar(
+                                      radius: 60,
+                                      child: CircleAvatar(
+                                        radius: 100,
+                                        backgroundImage: NetworkImage(snapshot.data['image']),
+                                      ),
+                                    ),
                               Positioned(
                                 bottom: 0,
                                 right: 4,
                                 child: GestureDetector(
-                                  onTap: () {
-                                    AlertDialog(
-                                      title: Text(
-                                          'Welcome'), // To display the title it is optional
-                                      content: Text(
-                                          'GeeksforGeeks'), // Message which will be pop up on the screen
-                                      // Action widget which will provide the user to acknowledge the choice
-                                      actions: [
-                                        FlatButton(
-                                          // FlatButton widget is used to make a text to work like a button
-                                          textColor: Colors.black,
-                                          onPressed:
-                                              () {}, // function used to perform after pressing the button
-                                          child: Text('CANCEL'),
-                                        ),
-                                        FlatButton(
-                                          textColor: Colors.black,
-                                          onPressed: () {},
-                                          child: Text('ACCEPT'),
-                                        ),
-                                      ],
-                                    );
-                                  },
+                                  onTap: () {},
                                   child: CircleAvatar(
                                     radius: 15,
                                     child: InkWell(
@@ -388,14 +345,20 @@ var name = 'Saeed Afzal';
                                                     ),
                                                     IconButton(
                                                       icon: InkWell(
-                                                        onTap: editName,
-                                                        child: const Icon(
-                                                            Icons.edit_outlined),
+                                                        child: const Icon(Icons
+                                                            .edit_outlined),
                                                       ),
                                                       onPressed: () {
-                                                        // setState(() {
-                                                        //   _volume += 10;
-                                                        // });
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      ChangeName(
+                                                                        name: snapshot
+                                                                            .data['name'],
+                                                                      )),
+                                                        );
                                                       },
                                                     ),
                                                   ],
@@ -464,9 +427,16 @@ var name = 'Saeed Afzal';
                                                       icon: const Icon(
                                                           Icons.edit_outlined),
                                                       onPressed: () {
-                                                        // setState(() {
-                                                        //   _volume += 10;
-                                                        // });
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      ChangeEmail(
+                                                                        email: snapshot
+                                                                            .data['email'],
+                                                                      )),
+                                                        );
                                                       },
                                                     ),
                                                   ],
@@ -536,9 +506,31 @@ var name = 'Saeed Afzal';
                                                       icon: const Icon(
                                                           Icons.edit_outlined),
                                                       onPressed: () {
-                                                        // setState(() {
-                                                        //   _volume += 10;
-                                                        // });
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ChangePassword()),
+                                                        );
+                                                        // showDialog(
+                                                        //     context: context,
+                                                        //     builder: (context) {
+                                                        //       return AlertDialog(
+                                                        //         title: new Text(
+                                                        //             "Error"),
+                                                        //         content: new Text(
+                                                        //             "File Download Failed!"),
+                                                        //         actions: [
+                                                        //           // FlatButton(
+                                                        //           //   child: Text(
+                                                        //           //       'ok'),
+                                                        //           //   onPressed: () =>
+                                                        //           //       Navigator.pop(
+                                                        //           //           context),
+                                                        //           // )
+                                                        //         ],
+                                                        //       );
+                                                        //     });
                                                       },
                                                     ),
                                                   ],
@@ -566,78 +558,84 @@ var name = 'Saeed Afzal';
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            width: size.width,
-                                            height: 75,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Color(0xFF7B7B7B),
-                                              ),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        "Mobile Number",
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.blue,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    IconButton(
-                                                      icon: const Icon(
-                                                          Icons.edit_outlined),
-                                                      onPressed: () {
-                                                        // setState(() {
-                                                        //   _volume += 10;
-                                                        // });
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 8.0),
-                                                      child: Text(
-                                                        "03122623413",
-                                                        style: TextStyle(
-                                                            fontSize: 16,
-                                                            color: Colors
-                                                                .blueGrey),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                  // Container(
+                                  //   child: Column(
+                                  //     children: [
+                                  //       Padding(
+                                  //         padding: const EdgeInsets.all(8.0),
+                                  //         child: Container(
+                                  //           width: size.width,
+                                  //           height: 75,
+                                  //           decoration: BoxDecoration(
+                                  //             border: Border.all(
+                                  //               color: Color(0xFF7B7B7B),
+                                  //             ),
+                                  //           ),
+                                  //           child: Column(
+                                  //             mainAxisAlignment:
+                                  //                 MainAxisAlignment.start,
+                                  //             children: [
+                                  //               Row(
+                                  //                 mainAxisAlignment:
+                                  //                     MainAxisAlignment
+                                  //                         .spaceBetween,
+                                  //                 children: [
+                                  //                   Padding(
+                                  //                     padding:
+                                  //                         const EdgeInsets.all(
+                                  //                             8.0),
+                                  //                     child: Text(
+                                  //                       "Mobile Number",
+                                  //                       style: TextStyle(
+                                  //                         fontSize: 14,
+                                  //                         fontWeight:
+                                  //                             FontWeight.bold,
+                                  //                         color: Colors.blue,
+                                  //                       ),
+                                  //                     ),
+                                  //                   ),
+                                  //                   IconButton(
+                                  //                     icon: const Icon(
+                                  //                         Icons.edit_outlined),
+                                  //                     onPressed: () {
+                                  //                       Navigator.push(
+                                  //                         context,
+                                  //                         MaterialPageRoute(
+                                  //                             builder: (context) =>
+                                  //                                 ChangePassword()),
+                                  //                       );
+                                  //                       // setState(() {
+                                  //                       //   _volume += 10;
+                                  //                       // });
+                                  //                     },
+                                  //                   ),
+                                  //                 ],
+                                  //               ),
+                                  //               Row(
+                                  //                 mainAxisAlignment:
+                                  //                     MainAxisAlignment.start,
+                                  //                 children: [
+                                  //                   Padding(
+                                  //                     padding:
+                                  //                         const EdgeInsets.only(
+                                  //                             left: 8.0),
+                                  //                     child: Text(
+                                  //                       "03122623413",
+                                  //                       style: TextStyle(
+                                  //                           fontSize: 16,
+                                  //                           color: Colors
+                                  //                               .blueGrey),
+                                  //                     ),
+                                  //                   ),
+                                  //                 ],
+                                  //               )
+                                  //             ],
+                                  //           ),
+                                  //         ),
+                                  //       )
+                                  //     ],
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),

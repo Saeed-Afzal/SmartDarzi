@@ -26,6 +26,7 @@ dependencies:
 
   shared_preferences: ^2.0.13
   animated_text_kit: ^4.2.1
+  intl: any
   carousel_slider:  
   font_awesome_flutter: ^9.2.0
   firebase_core:
