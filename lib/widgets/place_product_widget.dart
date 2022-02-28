@@ -1,3 +1,13 @@
+// 
+
+
+
+
+
+
+
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,16 +32,17 @@ class _PlaceProductWidgetState extends State<PlaceProductWidget> {
   }
 
   var v;
-  final Stream _usersStream = FirebaseFirestore.instance
-      .collection('userdata')
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
+      .collection('user data')
       .doc(auth.currentUser.uid)
+      .collection('Size Chart Data')
       .snapshots();
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: _usersStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(),

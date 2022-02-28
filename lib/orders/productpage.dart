@@ -8,6 +8,7 @@ import 'package:flutter_ecommerce_app/Screens/Component/Card_counter.dart';
 import 'package:flutter_ecommerce_app/Screens/constant.dart';
 import 'package:flutter_ecommerce_app/Screens/model/product.dart';
 import 'package:flutter_ecommerce_app/orders/tabs/customiseScreen.dart';
+import 'package:flutter_ecommerce_app/sizechartwithdatabase.dart';
 import 'package:flutter_ecommerce_app/widgets/place_product_widget.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,8 +16,8 @@ import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:flutter/cupertino.dart';
 //import 'package:geolocator/geolocator.dart';
 
-enum SingingCharacter { fabric, nofabric }
-String dropdownValue = 'One';
+enum FabricCharacter { fabric, nofabric }
+// String dropdownValue = 'One';
 
 class ProductPage extends StatefulWidget {
   ProductPage({Key key, @required this.productData}) : super(key: key);
@@ -30,11 +31,14 @@ class _ProductPageState extends State<ProductPage> {
   String date = "";
   DateTime selectedDate = DateTime.now();
 
-  SingingCharacter _character = SingingCharacter.fabric;
+  FabricCharacter _character = FabricCharacter.fabric;
 
   int selectedRadio = 0;
   int _currentImage = 0;
   var userCus = null;
+  var fabricData = 'I have fabric';
+  var deliveryData;
+  final comments = TextEditingController();
 
   List<Widget> buildPageIndicator() {
     List<Widget> list = [];
@@ -64,6 +68,7 @@ class _ProductPageState extends State<ProductPage> {
     {"value": 1, "name": "Smart Sizes"},
     {"value": 2, "name": "My Sizes"}
   ];
+
   List<dynamic> sizeType = [
     {"id": 1, "label": "Smart Sizes"},
     {"id": 2, "label": "My Sizes"}
@@ -76,16 +81,16 @@ class _ProductPageState extends State<ProductPage> {
 
   List<dynamic> sizeName = [];
 
-  // TextEditingController addressController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
-  // File pickedImageData;
-  // String imageUrl = 'No image to show';
+  File pickedImageData;
+  String imageUrl = 'No image to show';
 
-  // String sizeTypeIdFirstDropdown = '2';
-  // String sizeIdOfFirstDropdown;
-  // String sizeTypeIdSecondDropdown;
-  // String sizeIdOfSecondDropown;
-  // bool _isLoading = false;
+  String sizeTypeIdFirstDropdown = '1';
+  String sizeIdOfFirstDropdown;
+  String sizeTypeIdSecondDropdown;
+  String sizeIdOfSecondDropown;
+  bool _isLoading = false;
 
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
@@ -99,33 +104,92 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   addUserProductData() async {
+    if (sizeTypeIdFirstDropdown == '2') {
+      if (mySizeValue == '') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            'Please select Your size',
+            style: TextStyle(color: Colors.white),
+          ),
+          duration: Duration(seconds: 2),
+        ));
+        return;
+      }
+    }
+    if (sizeTypeIdFirstDropdown == '1') {
+      if (sizeIdOfSecondDropown == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            'Please enter your size',
+            style: TextStyle(color: Colors.white),
+          ),
+          duration: Duration(seconds: 2),
+        ));
+        return;
+      }
+    }
+    setState(() {
+      _isLoading = true;
+    });
     try {
       var sizeData = await firestoreInstance
           .collection('user data')
           .doc(auth.currentUser.uid)
           .collection('Size Chart Data')
-          .doc('PUZM5qroLUR8nfQxdFY2')
+          .doc(auth.currentUser.uid)
           .get();
       var customizeData =
           await firestoreInstance.collection('customize').doc(userCus).get();
+          if ((pickedImageData.toString().contains('/'))) {
+        var abc;
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('usersImages')
+            .child(sizeData['name'] + '.jpg');
+        await ref.putFile(pickedImageData);
+        abc = await ref.getDownloadURL();
+        setState(() {
+          imageUrl = abc;
+        });
+      }
+      print('Outside of image url');
       if (customizeData.data() == null) {
         firestoreInstance
             .collection('allorders')
             .doc('${auth.currentUser.uid}${DateTime.now().toString()}')
             .set({
+          'fabric': fabricData,
           'uid': auth.currentUser.uid,
           'productname': widget.productData.name,
           'productprice': widget.productData.price,
+          'productimage': widget.productData.images,
           ...sizeData.data(),
+          'status': 'pending',
+          'deliverydate': deliveryData,
+          'comment': comments.text,
+          'size type': sizeTypeIdFirstDropdown == '1'
+              ? sizes[int.parse(sizeIdOfSecondDropown) - 1]['Label']
+              : '',
+          'sizename': mySizeValue,
+          'uploadimage': imageUrl,
         });
       } else {
         firestoreInstance
             .collection('allorders')
             .doc('${auth.currentUser.uid}${DateTime.now().toString()}')
             .set({
+          'fabric': fabricData,
           ...sizeData.data(),
           ...customizeData.data(),
           'uid': auth.currentUser.uid,
+          'productimage': widget.productData.images,
+          'status': 'pending',
+          'deliverydate': deliveryData,
+          'comment': comments.text,
+          'sizetype': sizeTypeIdFirstDropdown == '1'
+              ? sizes[int.parse(sizeIdOfSecondDropown) - 1]['Label']
+              : '',
+          'sizename': mySizeValue,
         });
       }
       // print(customizeData.data());
@@ -136,38 +200,39 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   // @override
-  // void dispose() {
-  //   super.dispose();
-  //   addressController.dispose();
-  //   mySizeValue = '';
-  // }
+  void dispose() {
+    super.dispose();
+    // addressController.dispose();
+    comments.dispose();
+    mySizeValue = '';
+  }
 
-  // void _pickImageGallery() async {
-  //   final picker = ImagePicker();
-  //   try {
-  //     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-  //     final pickedImageFile = File(pickedImage.path);
-  //     setState(() {
-  //       pickedImageData = pickedImageFile;
-  //     });
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //       content: Text(
-  //         'Your image is selected',
-  //         style: TextStyle(color: Colors.white),
-  //       ),
-  //       duration: Duration(seconds: 2),
-  //     ));
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //       content: Text(
-  //         '$e',
-  //         style: TextStyle(color: Colors.white),
-  //       ),
-  //       duration: Duration(seconds: 2),
-  //     ));
-  //   }
-  //   // Navigator.pop(context);
-  // }
+  void _pickImageGallery() async {
+    final picker = ImagePicker();
+    try {
+      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+      final pickedImageFile = File(pickedImage.path);
+      setState(() {
+        pickedImageData = pickedImageFile;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Your image is selected',
+          style: TextStyle(color: Colors.white),
+        ),
+        duration: Duration(seconds: 2),
+      ));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          '$e',
+          style: TextStyle(color: Colors.white),
+        ),
+        duration: Duration(seconds: 2),
+      ));
+    }
+    // Navigator.pop(context);
+  }
 
   // void _remove() {
   //   setState(() {
@@ -296,8 +361,7 @@ class _ProductPageState extends State<ProductPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                margin:
-                    EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 10),
+                margin: EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 10),
                 height: 360,
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -338,8 +402,8 @@ class _ProductPageState extends State<ProductPage> {
                                           _currentImage = page;
                                         });
                                       },
-                                      children: widget.productData.images
-                                          .map((path) {
+                                      children:
+                                          widget.productData.images.map((path) {
                                         return Center(
                                           child: Align(
                                             alignment: Alignment.centerRight,
@@ -482,11 +546,13 @@ class _ProductPageState extends State<ProductPage> {
                         Expanded(
                           child: ListTile(
                             title: const Text('I have fabric'),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.fabric,
+                            leading: Radio<FabricCharacter>(
+                              value: FabricCharacter.fabric,
                               groupValue: _character,
-                              onChanged: (SingingCharacter value) {
+                              onChanged: (FabricCharacter value) {
                                 setState(() {
+                                  fabricData = 'I have fabric';
+
                                   _character = value;
                                 });
                               },
@@ -496,11 +562,12 @@ class _ProductPageState extends State<ProductPage> {
                         Expanded(
                           child: ListTile(
                             title: const Text('I dont have fabric'),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.nofabric,
+                            leading: Radio<FabricCharacter>(
+                              value: FabricCharacter.nofabric,
                               groupValue: _character,
-                              onChanged: (SingingCharacter value) {
+                              onChanged: (FabricCharacter value) {
                                 setState(() {
+                                  fabricData = 'I dont have fabric';
                                   _character = value;
                                 });
                               },
@@ -517,6 +584,8 @@ class _ProductPageState extends State<ProductPage> {
               ),
               Container(
                 width: double.infinity,
+                height: 250,
+
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(),
@@ -533,71 +602,142 @@ class _ProductPageState extends State<ProductPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: size.width * 1.0,
-                    height: 180,
+                    height: 230,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Align(
-                          alignment: AlignmentDirectional(-0.85, 0),
-                          child: Text(
-                            'Size Details',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListTile(
-                            title: const Text('Pre Made Size'),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.fabric,
-                              groupValue: _character,
-                              onChanged: (SingingCharacter value) {
-                                setState(() {
-                                  _character = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListTile(
-                            title: const Text('Custom Size'),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.nofabric,
-                              groupValue: _character,
-                              onChanged: (SingingCharacter value) {
-                                setState(() {
-                                  _character = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        // DropdownButton<String>(
-                        //   value: dropdownValue,
-                        //   icon: const Icon(Icons.arrow_downward),
-                        //   elevation: 16,
-                        //   style: const TextStyle(color: Colors.deepPurple),
-                        //   underline: Container(
-                        //     height: 2,
-                        //     color: Colors.deepPurpleAccent,
+                        // Align(
+                        //   alignment: AlignmentDirectional(-0.85, 0),
+                        //   child: Text(
+                        //     'Size Details',
+                        //     style: TextStyle(
+                        //       fontSize: 18,
+                        //       fontWeight: FontWeight.w500,
+                        //       color: Colors.blue,
+                        //     ),
                         //   ),
-                        //   onChanged: (String newValue) {
-                        //     setState(() {
-                        //       dropdownValue = newValue;
-                        //     });
-                        //   },
-                        //   items: <String>['One', 'Two', 'Free', 'Four']
-                        //       .map<DropdownMenuItem<String>>((String value) {
-                        //     return DropdownMenuItem<String>(
-                        //       value: value,
-                        //       child: Text(value),
-                        //     );
-                        //   }).toList(),
                         // ),
+                        // Expanded(
+                        //   child: ListTile(
+                        //     title: const Text('Pre Made Size'),
+                        //     leading: Radio<FabricCharacter>(
+                        //       value: FabricCharacter.fabric,
+                        //       groupValue: _character,
+                        //       onChanged: (FabricCharacter value) {
+                        //         setState(() {
+                        //           _character = value;
+                        //         });
+                        //       },
+                        //     ),
+                        //   ),
+                        // ),
+                        // Expanded(
+                        //   child: ListTile(
+                        //     title: const Text('Custom Size'),
+                        //     leading: Radio<FabricCharacter>(
+                        //       value: FabricCharacter.nofabric,
+                        //       groupValue: _character,
+                        //       onChanged: (FabricCharacter value) {
+                        //         setState(() {
+                        //           _character = value;
+                        //         });
+                        //       },
+                        //     ),
+                        //   ),
+                        // ),
+                       
+
+
+
+
+
+
+
+
+
+
+
+
+ //First DropDown
+                        FormHelper.dropDownWidgetWithLabel(
+                          context,
+                          "Size Type",
+                          "Select Size Type here",
+                          this.sizeTypeIdFirstDropdown,
+                          this.sizeType,
+                          (onChangedVal) {
+                            sizeTypeIdFirstDropdown = onChangedVal;
+                            sizeName = sizes
+                                .where((sizeItem) =>
+                                    sizeItem["ParentId"].toString() ==
+                                    onChangedVal.toString())
+                                .toList();
+                          },
+                          (onValidateVal) {
+                            if (onValidateVal == null) {
+                              return "Please select size type";
+                            }
+                            return null;
+                          },
+                          labelFontSize: 16,
+                          borderColor: Theme.of(context).primaryColor,
+                          borderFocusColor: Theme.of(context).primaryColor,
+                          borderRadius: 10,
+                          optionValue: "id",
+                          optionLabel: "label",
+                        ),
+                        SizedBox(
+                          height: 1,
+                        ),
+
+                        // //Second DropDown
+                        sizeTypeIdFirstDropdown == '1'
+                            ? FormHelper.dropDownWidgetWithLabel(
+                                context,
+                                "Size Name",
+                                "Select Size",
+                                this.sizeIdOfSecondDropown,
+                                this.sizeName,
+                                (onChangedVal) {
+                                  this.sizeIdOfSecondDropown = onChangedVal;
+                                },
+                                (onValidate) {
+                                  return null;
+                                },
+                                labelFontSize: 16,
+                                borderColor: Theme.of(context).primaryColor,
+                                borderFocusColor:
+                                    Theme.of(context).primaryColor,
+                                borderRadius: 10,
+                                optionValue: "ID",
+                                optionLabel: "Label",
+                              )
+                            : Center(
+                                child: PlaceProductWidget(),
+                                // child: TextButton(
+                                //   onPressed: () {
+                                //     Navigator.of(context).push(
+                                //         MaterialPageRoute(
+                                //             builder: (ctx) => Sizec()));
+                                //   },
+                                //   child: Text('Get Size'),
+                                // ),
+                              ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         SizedBox(
                           height: 20,
                         ),
@@ -749,8 +889,8 @@ class _ProductPageState extends State<ProductPage> {
                           width: MediaQuery.of(context).size.width,
                           height: 180,
                           margin: EdgeInsets.all(10),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 10),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage("assets/sideImage.jpg"),
@@ -768,8 +908,7 @@ class _ProductPageState extends State<ProductPage> {
                               new Text(
                                 "For More Customization",
                                 style: TextStyle(
-                                    color:
-                                        HexColor("#0071bc").withOpacity(0.8),
+                                    color: HexColor("#0071bc").withOpacity(0.8),
                                     fontSize: 28.0,
                                     height: 1.4,
                                     fontWeight: FontWeight.w600),
@@ -793,17 +932,17 @@ class _ProductPageState extends State<ProductPage> {
                                           RoundedRectangleBorder(
                                               borderRadius: BorderRadius.zero,
                                               side: BorderSide(
-                                                  color: HexColor("#0071bc"))))),
+                                                  color:
+                                                      HexColor("#0071bc"))))),
                                   onPressed: () async {
                                     userCus = await Navigator.of(context)
                                         .push(MaterialPageRoute(
                                             builder: (ctx) => CustomiseScreen(
                                                   imageUrl: widget
                                                       .productData.images[0],
-                                                  name:
-                                                      widget.productData.name,
-                                                  price: widget
-                                                      .productData.price,
+                                                  name: widget.productData.name,
+                                                  price:
+                                                      widget.productData.price,
                                                 )));
                                   })
                             ],
@@ -814,6 +953,139 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
+              // Container(
+              //   // width: double.infinity,
+              //   decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.only(),
+              //     boxShadow: [
+              //       BoxShadow(
+              //         color: Colors.grey.withOpacity(0.5),
+              //         spreadRadius: 5,
+              //         blurRadius: 7,
+              //         offset: Offset(0, 3), // changes position of shadow
+              //       ),
+              //     ],
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(8.0),
+              //     child: Container(
+              //       width: size.width * 1.0,
+              //       child: Column(
+              //         mainAxisSize: MainAxisSize.max,
+              //         children: [
+              //           TextFormField(
+              //             controller: comments,
+              //             keyboardType: TextInputType.multiline,
+              //             decoration: InputDecoration(
+              //                 prefixIcon: Padding(
+              //                   padding: EdgeInsets.all(0.0),
+              //                   child: Icon(Icons.comment,
+              //                       size: 26.0, color: Colors.blue),
+              //                 ),
+              //                 contentPadding: const EdgeInsets.symmetric(
+              //                     vertical: 25.0, horizontal: 10.0),
+              //                 hintText: "Breif Your Design Here",
+              //                 hintStyle: TextStyle(
+              //                     color: Colors.blue,
+              //                     fontWeight: FontWeight.bold),
+              //                 border: OutlineInputBorder(
+              //                     borderRadius: BorderRadius.all(
+              //                         new Radius.circular(5.0))),
+              //                 labelStyle: TextStyle(color: primaryColor)),
+              //             textAlign: TextAlign.center,
+              //             style: TextStyle(
+              //               color: Colors.black,
+              //               fontSize: 15.0,
+              //             ),
+              //             // controller: host,
+              //             validator: (value) {
+              //               if (value.isEmpty) {
+              //                 return "Empty value";
+              //               }
+              //             },
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                // width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: size.width * 1.0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Comment",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            "Add Comment to describe more!",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black26,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                            minLines:
+                                6, // any number you need (It works as the rows for the textarea)
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            decoration: InputDecoration(
+                              // prefixIcon: Padding(
+                              //   padding: EdgeInsets.all(0.0),
+                              //   // child: Icon(Icons.comment,
+                              //   //     size: 26.0, color: Colors.blue),
+                              // ),
+                              hintText: "Brief Your Design Here",
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                      new Radius.circular(5.0))),
+                            ))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
               SizedBox(
                 height: 10,
               ),
@@ -838,108 +1110,27 @@ class _ProductPageState extends State<ProductPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        TextFormField(
-                          keyboardType: TextInputType.multiline,
-                          decoration: InputDecoration(
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.all(0.0),
-                                child: Icon(Icons.comment,
-                                    size: 26.0, color: Colors.blue),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 25.0, horizontal: 10.0),
-                              hintText: "Breif Your Design Here",
-                              hintStyle: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                      new Radius.circular(5.0))),
-                              labelStyle: TextStyle(color: primaryColor)),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15.0,
-                          ),
-                          // controller: host,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Empty value";
-                            }
-                          },
-                        )
-
-                        // Container(
-                        //   width: MediaQuery.of(context).size.width,
-                        //   height: 180,
-                        //   margin: EdgeInsets.all(10),
-                        //   padding: EdgeInsets.symmetric(
-                        //       vertical: 5, horizontal: 10),
-                        //   decoration: BoxDecoration(
-                        //     image: DecorationImage(
-                        //       image: AssetImage("assets/sideImage.jpg"),
-                        //       fit: BoxFit.cover,
-                        //       colorFilter: new ColorFilter.mode(
-                        //           Colors.black.withOpacity(0.4),
-                        //           BlendMode.dstATop),
-                        //     ),
-                        //     borderRadius: BorderRadius.circular(
-                        //         15), // Set rounded corner radius
-                        //   ),
-                        //   child: Column(
-                        //     mainAxisAlignment: MainAxisAlignment.center,
-                        //     children: [
-                        //       new Text(
-                        //         "For More Customization",
-                        //         style: TextStyle(
-                        //             color:
-                        //                 HexColor("#0071bc").withOpacity(0.8),
-                        //             fontSize: 28.0,
-                        //             height: 1.4,
-                        //             fontWeight: FontWeight.w600),
-                        //         textAlign: TextAlign.center,
-                        //       ),
-                        //       SizedBox(
-                        //         height: 10,
-                        //       ),
-                        //       OutlinedButton(
-                        //           child: Text("Click Here".toUpperCase(),
-                        //               style: TextStyle(fontSize: 14)),
-                        //           style: ButtonStyle(
-                        //               foregroundColor:
-                        //                   MaterialStateProperty.all<Color>(
-                        //                       Colors.white),
-                        //               backgroundColor:
-                        //                   MaterialStateProperty.all<Color>(
-                        //                       HexColor("#0071bc")),
-                        //               shape: MaterialStateProperty.all<
-                        //                       RoundedRectangleBorder>(
-                        //                   RoundedRectangleBorder(
-                        //                       borderRadius: BorderRadius.zero,
-                        //                       side: BorderSide(
-                        //                           color: HexColor("#0071bc"))))),
-                        //           onPressed: () async {
-                        //             userCus = await Navigator.of(context)
-                        //                 .push(MaterialPageRoute(
-                        //                     builder: (ctx) =>
-                        //                         CustomiseScreen()));
-                        //           })
-                        //     ],
-                        //   ),
-                        // ),
+                        SizedBox(
+                          width: 350.0,
+                          height: 40,
+                          child: ElevatedButton(
+                              onPressed: addUserProductData,
+                              child: Text("PLACE ORDER")),
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
+
               SizedBox(
                 height: 10,
               ),
-              ElevatedButton(
-                  onPressed: addUserProductData, child: Text("CHECKOUT")),
-              SizedBox(
-                height: 10,
-              ),
+              // ElevatedButton(
+              //     onPressed: addUserProductData, child: Text("CHECKOUT")),
+              // SizedBox(
+              //   height: 10,
+              // ),
             ],
           ),
         ),
@@ -979,6 +1170,8 @@ class _ProductPageState extends State<ProductPage> {
     if (selected != null && selected != selectedDate)
       setState(() {
         selectedDate = selected;
+        deliveryData =
+            "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
       });
   }
 
