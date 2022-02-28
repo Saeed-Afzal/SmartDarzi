@@ -100,7 +100,7 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: Text(
-                                         "Product Name " +
+                                          "Product Name " +
                                               snapshot.data.docs[index]
                                                   ['productname'],
                                           style: TextStyle(
@@ -114,7 +114,7 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: Text(
-                                       "Total: Rs. " +
+                                          "Total: Rs. " +
                                               snapshot.data.docs[index]
                                                   ['price'],
                                           style: TextStyle(
