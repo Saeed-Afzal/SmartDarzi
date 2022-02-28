@@ -102,7 +102,8 @@ class _ProductPageState extends State<ProductPage> {
       print(e);
     }
   }
-var sizee = 'asas';
+
+  var sizee = 'asas';
   addUserProductData() async {
     if (sizeTypeIdFirstDropdown == '1') {
       if (mySizeValue == '') {
@@ -136,16 +137,14 @@ var sizee = 'asas';
           .collection('user data')
           .doc(auth.currentUser.uid)
           .collection('Size Chart Data')
-           .where("size name", isEqualTo: sizee)
-      .snapshots();
+          .where("size name", isEqualTo: sizee)
+          .snapshots();
       var customizeData =
           await firestoreInstance.collection('customize').doc(userCus).get();
-          if ((pickedImageData.toString().contains('/'))) {
+      if ((pickedImageData.toString().contains('/'))) {
         var abc;
-        final ref = FirebaseStorage.instance
-            .ref()
-            .child('usersImages');
-            // .child(sizeData['name'] + '.jpg');
+        final ref = FirebaseStorage.instance.ref().child('usersImages');
+        // .child(sizeData['name'] + '.jpg');
         await ref.putFile(pickedImageData);
         abc = await ref.getDownloadURL();
         setState(() {
@@ -154,14 +153,13 @@ var sizee = 'asas';
       }
       print('Outside of image url');
 
-    
-
       if (customizeData.data() == null) {
         firestoreInstance
             .collection('allorders')
             .doc('${auth.currentUser.uid}${DateTime.now().toString()}')
             .set({
           'fabric': fabricData,
+          'email': auth.currentUser.email,
           'uid': auth.currentUser.uid,
           'productname': widget.productData.name,
           'productprice': widget.productData.price,
@@ -184,7 +182,10 @@ var sizee = 'asas';
           'fabric': fabricData,
           // ...sizeData.data(),
           ...customizeData.data(),
+          'email': auth.currentUser.email,
           'uid': auth.currentUser.uid,
+          'productname': widget.productData.name,
+          'productprice': widget.productData.price,
           'productimage': widget.productData.images,
           'status': 'pending',
           'deliverydate': deliveryData,
@@ -195,8 +196,7 @@ var sizee = 'asas';
           'sizename': mySizeValue,
         });
       }
-       print(customizeData.data());
-
+      print(customizeData.data());
     } catch (e) {
       print(e);
     }
@@ -588,7 +588,6 @@ var sizee = 'asas';
               Container(
                 width: double.infinity,
                 height: 250,
-
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(),
@@ -648,20 +647,8 @@ var sizee = 'asas';
                         //     ),
                         //   ),
                         // ),
-                       
 
-
-
-
-
-
-
-
-
-
-
-
- //First DropDown
+                        //First DropDown
                         FormHelper.dropDownWidgetWithLabel(
                           context,
                           "Size Type",
@@ -726,20 +713,6 @@ var sizee = 'asas';
                                 //   child: Text('Get Size'),
                                 // ),
                               ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         SizedBox(
                           height: 20,
@@ -1068,7 +1041,7 @@ var sizee = 'asas';
                           height: 10,
                         ),
                         TextFormField(
-                          controller: comments,
+                            controller: comments,
                             minLines:
                                 6, // any number you need (It works as the rows for the textarea)
                             keyboardType: TextInputType.multiline,

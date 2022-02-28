@@ -13,13 +13,14 @@ class OrderHistoryCompleted extends StatefulWidget {
 class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
   final Stream<QuerySnapshot> _userOrderStream = FirebaseFirestore.instance
       .collection("allorders")
-      .where('uid',isEqualTo: '${auth.currentUser.uid}')
+      .where('uid', isEqualTo: '${auth.currentUser.uid}')
       .where("status", isEqualTo: 'completed')
       .snapshots();
 
   void populateDate(value) {}
   @override
   Widget build(BuildContext context) {
+      Size size = MediaQuery.of(context).size;
     return StreamBuilder(
         stream: _userOrderStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -46,9 +47,14 @@ class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
                           child: Column(
                             children: [
                               Card(
-                                child: Image.asset(
-                                  'assets/1.png',
-                                  fit: BoxFit.cover,
+                                child: Container(
+                                  height: size.height * 0.30,
+                                  // margin: EdgeInsets.only(right: 50),
+                                  child: FadeInImage.assetNetwork(
+                                    placeholder: imageLoading,
+                                    image: snapshot.data.docs[index]['productimage'][0],
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -79,8 +85,7 @@ class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
                                         child: Text(
                                           dateTimeFormat
                                               .format(DateTime.parse(snapshot
-                                                  .data
-                                                  .docs[index]['order placed']))
+                                                  .data.docs[index]['date']))
                                               .toString(),
                                           style: TextStyle(
                                             fontSize: 20,

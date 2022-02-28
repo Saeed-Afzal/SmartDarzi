@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_ecommerce_app/Screens/constant.dart';
 
 class OrderHistoryPending extends StatefulWidget {
   const OrderHistoryPending({Key key}) : super(key: key);
@@ -19,6 +20,8 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
       .snapshots();
   @override
   Widget build(BuildContext context) {
+      Size size = MediaQuery.of(context).size;
+
     return StreamBuilder(
         stream: _userOrderStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -45,9 +48,14 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                           child: Column(
                             children: [
                               Card(
-                                child: Image.asset(
-                                  'assets/1.png',
-                                  fit: BoxFit.cover,
+                                child: Container(
+                                  height: size.height * 0.30,
+                                  // margin: EdgeInsets.only(right: 50),
+                                  child: FadeInImage.assetNetwork(
+                                    placeholder: imageLoading,
+                                    image: snapshot.data.docs[index]['productimage'][0],
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
