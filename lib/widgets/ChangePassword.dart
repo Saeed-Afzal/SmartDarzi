@@ -1,12 +1,9 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_ecommerce_app/Screens/constant.dart';
-import 'package:flutter_ecommerce_app/Utilities/constants.dart';
-import 'package:flutter_ecommerce_app/widgets/passwordWidget.dart';
+
 //import 'package:geolocator/geolocator.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -19,8 +16,8 @@ class ChangePassword extends StatefulWidget {
 
 class _ChangePasswordState extends State<ChangePassword> {
   // final _preferenceService = SharedPref();
+  // ignore: non_constant_identifier_names
   TextEditingController Password = TextEditingController();
-  TextEditingController CPassword = TextEditingController();
 
   //Position _currentPosition;
   String date = "";
@@ -29,30 +26,6 @@ class _ChangePasswordState extends State<ChangePassword> {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
-  // addDataToDatabase() async {
-  //   try {
-  //     await firestoreInstance.collection('customize').doc(userCus).set({
-  //       'uid': auth.currentUser.uid,
-  //       'email': auth.currentUser.email,
-  //       'isCustomize': true,
-  //       'colar': collarData,
-  //       'daman': damanDesign,
-  //       'button': buttonStyle,
-  //       'shalwar': shalwarDesign,
-  //       'date': userCus,
-  //     });
-  //     Navigator.of(context).pop(userCus);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   addressController.dispose();
-  //   mySizeValue = '';
-  // }
   bool _passVisible = false;
   @override
   void initState() {
@@ -60,10 +33,19 @@ class _ChangePasswordState extends State<ChangePassword> {
     super.initState();
   }
 
-  void saveCustomization() {
-    // final dataView = Data(guid: "2321312312321", isCustomized: true);
-    print("Save Customization");
-    // _preferenceService.saveCustomization(dataView);
+  editName() async {
+    try {
+      await firestoreInstance
+          .collection('userinfo')
+          .doc(auth.currentUser.uid)
+          .update({
+        'password': Password.text,
+      });
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -97,14 +79,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                         labelText: 'Password',
                         suffixIcon: IconButton(
                           icon: Icon(
-                            // Based on passwordVisible state choose the icon
                             _passVisible
                                 ? Icons.visibility
                                 : Icons.visibility_off,
                             color: Theme.of(context).primaryColorDark,
                           ),
                           onPressed: () {
-                            // Update the state i.e. toogle the state of passwordVisible variable
                             setState(() {
                               _passVisible = !_passVisible;
                             });
@@ -129,14 +109,35 @@ class _ChangePasswordState extends State<ChangePassword> {
       elevation: 0,
       centerTitle: true,
       title: Text(
-        "Name",
+        "Change Password",
         // style: TextStyle(color: Colors.black),
       ),
       actions: [
         GestureDetector(
           onTap: () {
-            // addDataToDatabase();
-            // saveCustomization();
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text("Are you sure you want to proceed?"),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: const Text('Yes'),
+                      onPressed: () {
+                        editName();
+                      },
+                    )
+                  ],
+                );
+              },
+            );
           },
           child: Icon(
             Icons.check,

@@ -1,13 +1,14 @@
-import 'dart:io';
+// import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_ecommerce_app/Screens/constant.dart';
-import 'package:flutter_ecommerce_app/widgets/TextFieldWidget.dart';
+// import 'package:flutter_ecommerce_app/widgets/TextFieldWidget.dart';
 //import 'package:geolocator/geolocator.dart';
 
+// ignore: must_be_immutable
 class ChangeName extends StatefulWidget {
   String name;
   ChangeName({Key key, this.name}) : super(key: key);
@@ -35,10 +36,6 @@ class _ChangeNameState extends State<ChangeName> {
     }
   }
 
-
-
-
-
   //Position _currentPosition;
   String date = "";
   DateTime selectedDate = DateTime.now();
@@ -46,32 +43,6 @@ class _ChangeNameState extends State<ChangeName> {
   var userCus = DateTime.now().toString();
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
-
-  // addDataToDatabase() async {
-  //   try {
-  //     await firestoreInstance.collection('customize').doc(userCus).set({
-  //       'uid': auth.currentUser.uid,
-  //       'email': auth.currentUser.email,
-  //       'isCustomize': true,
-  //       'colar': collarData,
-  //       'daman': damanDesign,
-  //       'button': buttonStyle,
-  //       'shalwar': shalwarDesign,
-  //       'date': userCus,
-  //     });
-  //     Navigator.of(context).pop(userCus);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   addressController.dispose();
-  //   mySizeValue = '';
-  // }
-
   @override
   void initState() {
     ename.text = widget.name;
@@ -85,8 +56,7 @@ class _ChangeNameState extends State<ChangeName> {
   }
 //edit name
 
- final ename= TextEditingController();
-
+  final ename = TextEditingController();
 
   editName() async {
     try {
@@ -96,8 +66,8 @@ class _ChangeNameState extends State<ChangeName> {
           .update({
         'name': ename.text,
       });
-      // Navigator.of(context).pop(userCus);
-
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
     } catch (e) {
       print(e);
     }
@@ -108,12 +78,7 @@ class _ChangeNameState extends State<ChangeName> {
     super.dispose();
     // addressController.dispose();
     ename.dispose();
-
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -167,28 +132,33 @@ class _ChangeNameState extends State<ChangeName> {
       actions: [
         GestureDetector(
           onTap: () {
-            editName();
-            // print(ename);
-            // saveCustomization();
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text("Are you sure you want to proceed?"),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: const Text('Yes'),
+                      onPressed: () {
+                        editName();
+                      },
+                    )
+                  ],
+                );
+              },
+            );
           },
-          child: GestureDetector(
-            onTap: () {
-              editName();
-              // showDialog(
-              //   context: context,
-              //   builder: (context) {
-              //     return AlertDialog(
-              //       // Retrieve the text the that user has entered by using the
-              //       // TextEditingController.
-              //       content: Text(nameField.text),
-              //     );
-              //   },
-              // );
-            },
-            child: Icon(
-              Icons.check,
-              size: 26.0,
-            ),
+          child: Icon(
+            Icons.check,
+            size: 26.0,
           ),
         ),
         SizedBox(width: defaultPadding),
