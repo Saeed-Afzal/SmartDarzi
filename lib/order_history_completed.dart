@@ -20,7 +20,7 @@ class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
   void populateDate(value) {}
   @override
   Widget build(BuildContext context) {
-      Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return StreamBuilder(
         stream: _userOrderStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -52,7 +52,8 @@ class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
                                   // margin: EdgeInsets.only(right: 50),
                                   child: FadeInImage.assetNetwork(
                                     placeholder: imageLoading,
-                                    image: snapshot.data.docs[index]['productimage'][0],
+                                    image: snapshot.data.docs[index]
+                                        ['productimage'][0],
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -98,7 +99,9 @@ class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: Text(
-                                          "Order Ref:",
+                                          "Product Name " +
+                                              snapshot.data.docs[index]
+                                                  ['productname'],
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
@@ -110,7 +113,9 @@ class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: Text(
-                                          "Total: Rs. 3,127.00",
+                                          "Total: Rs. " +
+                                              snapshot.data.docs[index]
+                                                  ['price'],
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,

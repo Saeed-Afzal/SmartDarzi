@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_app/Screens/constant.dart';
 import 'package:flutter_ecommerce_app/order_history_pending.dart';
 
 class OrderHistoryCancelled extends StatefulWidget {
@@ -17,6 +18,7 @@ class _OrderHistoryCancelledState extends State<OrderHistoryCancelled> {
       .snapshots();
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return StreamBuilder(
         stream: _userOrderStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -43,9 +45,15 @@ class _OrderHistoryCancelledState extends State<OrderHistoryCancelled> {
                           child: Column(
                             children: [
                               Card(
-                                child: Image.asset(
-                                  'assets/1.png',
-                                  fit: BoxFit.cover,
+                                child: Container(
+                                  height: size.height * 0.30,
+                                  // margin: EdgeInsets.only(right: 50),
+                                  child: FadeInImage.assetNetwork(
+                                    placeholder: imageLoading,
+                                    image: snapshot.data.docs[index]
+                                        ['productimage'][0],
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -74,7 +82,10 @@ class _OrderHistoryCancelledState extends State<OrderHistoryCancelled> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          "08th Feb 22 at 10:29PM",
+                                          dateTimeFormat
+                                              .format(DateTime.parse(snapshot
+                                                  .data.docs[index]['date']))
+                                              .toString(),
                                           style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w800,
@@ -86,7 +97,7 @@ class _OrderHistoryCancelledState extends State<OrderHistoryCancelled> {
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: Text(
-                                          "Order Ref:",
+                                          "Product Name " + snapshot.data.docs[index]['productname'],
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
@@ -98,7 +109,8 @@ class _OrderHistoryCancelledState extends State<OrderHistoryCancelled> {
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: Text(
-                                          "Total: Rs. 3,127.00",
+                                          "Total: Rs. " + snapshot
+                                                  .data.docs[index]['price'],
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
