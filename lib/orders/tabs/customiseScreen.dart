@@ -270,9 +270,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/shirtt.png'))
+                              // trailing: CircleAvatar(
+                              //     backgroundImage:
+                              //         AssetImage('assets/shirtt.png'))
                                       ),
                           ListTile(
                               title: Text("Sherwani Collar"),
@@ -286,9 +286,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/kurta.png'))
+                              // trailing: CircleAvatar(
+                              //     backgroundImage:
+                              //         AssetImage('assets/kurta.png'))
                                       )
                         ],
                       ),
@@ -363,9 +363,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing:  CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/flat.png'))
+                              // trailing:  CircleAvatar(
+                              //     backgroundImage:
+                              //         AssetImage('assets/flat.png'))
                               
                               ),
                           ListTile(
@@ -380,9 +380,10 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing:  CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/glass.png'))),
+                              // trailing:  CircleAvatar(
+                              //     backgroundImage:
+                              //         AssetImage('assets/glass.png'))
+                                      ),
                           ListTile(
                               title: Text("Leather Buttons"),
                               leading: Radio(
@@ -395,9 +396,10 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: CircleAvatar(
-                                  backgroundImage: AssetImage('assets/leather.png')
-                                  )),
+                              // trailing: CircleAvatar(
+                              //     backgroundImage: AssetImage('assets/leather.png')
+                              //     )
+                                  ),
                           ListTile(
                               title: Text("Lapple Buttons"),
                               leading: Radio(
@@ -410,9 +412,10 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing:  CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/lapel.png')))
+                              // trailing:  CircleAvatar(
+                              //     backgroundImage:
+                              //         AssetImage('assets/lapel.png'))
+                                      )
                         ],
                       ),
                     ),
@@ -483,9 +486,10 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing:  CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/daman1.jpg'))),
+                              // trailing:  CircleAvatar(
+                              //     backgroundImage:
+                              //         AssetImage('assets/daman1.jpg'))
+                                      ),
                           ListTile(
                               title: Text("Straight Daman"),
                               leading: Radio(
@@ -498,9 +502,10 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing:  CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/daman2.jpg')))
+                              // trailing:  CircleAvatar(
+                              //     backgroundImage:
+                              //         AssetImage('assets/daman2.jpg'))
+                                      )
                         ],
                       ),
                     ),
@@ -571,9 +576,10 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/shalwar1.jpg'))),
+                              // trailing: CircleAvatar(
+                              //     backgroundImage:
+                              //         AssetImage('assets/shalwar1.jpg'))
+                                      ),
                           ListTile(
                               title: Text("Trouser Design"),
                               leading: Radio(
@@ -586,9 +592,10 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/shalwar2.jpg'))),
+                              // trailing: CircleAvatar(
+                              //     backgroundImage:
+                              //         AssetImage('assets/shalwar2.jpg'))
+                                      ),
                           ListTile(
                               title: Text("Straight Pant Design"),
                               leading: Radio(
@@ -601,9 +608,10 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/shalwar3.jpg')))
+                              // trailing: CircleAvatar(
+                              //     backgroundImage:
+                              //         AssetImage('assets/shalwar3.jpg'))
+                                      )
                         ],
                       ),
                     ),
