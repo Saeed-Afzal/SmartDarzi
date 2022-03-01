@@ -161,39 +161,39 @@ class _BottomBarState extends State<BottomBar> {
               ),
 
               // button 4
-              GestureDetector(
-                onTap: () {
-                  setBottomBarIndex(3);
-                },
-                child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                        color: currentIndex == 3
-                            ? AppColors.primaryLight
-                            : AppColors.white,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          'assets/cart.svg',
-                          width: 20,
-                          color: currentIndex == 3
-                              ? AppColors.primary
-                              : Colors.grey,
-                        ),
-                        currentIndex == 3
-                            ? Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: PrimaryText(
-                                    text: 'Cart',
-                                    size: 16,
-                                    color: AppColors.primaryblue,
-                                    fontWeight: FontWeight.w700),
-                              )
-                            : SizedBox()
-                      ],
-                    )),
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     setBottomBarIndex(3);
+              //   },
+              //   child: Container(
+              //       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              //       decoration: BoxDecoration(
+              //           color: currentIndex == 3
+              //               ? AppColors.primaryLight
+              //               : AppColors.white,
+              //           borderRadius: BorderRadius.circular(20)),
+              //       child: Row(
+              //         children: [
+              //           SvgPicture.asset(
+              //             'assets/cart.svg',
+              //             width: 20,
+              //             color: currentIndex == 3
+              //                 ? AppColors.primary
+              //                 : Colors.grey,
+              //           ),
+              //           currentIndex == 3
+              //               ? Padding(
+              //                   padding: const EdgeInsets.only(left: 10),
+              //                   child: PrimaryText(
+              //                       text: 'Cart',
+              //                       size: 16,
+              //                       color: AppColors.primaryblue,
+              //                       fontWeight: FontWeight.w700),
+              //                 )
+              //               : SizedBox()
+              //         ],
+              //       )),
+              // ),
             ],
           ),
         ),

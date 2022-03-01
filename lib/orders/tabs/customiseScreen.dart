@@ -25,13 +25,13 @@ class CustomiseScreen extends StatefulWidget {
   String name;
   String imageUrl;
   String price;
-  String description;
+  
   CustomiseScreen({
     Key key,
     @required this.name,
     @required this.imageUrl,
     @required this.price,
-    @required this.description,
+    
   }) : super(key: key);
   @override
   _CustomiseScreenState createState() => _CustomiseScreenState();
@@ -181,17 +181,17 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          widget.description,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Text(
+                      //     widget.description,
+                      //     style: TextStyle(
+                      //       fontSize: 14,
+                      //       fontWeight: FontWeight.normal,
+                      //       color: Colors.black,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   const Divider(
@@ -272,7 +272,8 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                               ),
                               trailing: CircleAvatar(
                                   backgroundImage:
-                                      AssetImage('assets/shirtt.png'))),
+                                      AssetImage('assets/shirtt.png'))
+                                      ),
                           ListTile(
                               title: Text("Sherwani Collar"),
                               leading: Radio(
@@ -287,7 +288,8 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                               ),
                               trailing: CircleAvatar(
                                   backgroundImage:
-                                      AssetImage('assets/kurta.png')))
+                                      AssetImage('assets/kurta.png'))
+                                      )
                         ],
                       ),
                     ),
@@ -361,7 +363,11 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: Icon(Icons.star)),
+                              trailing:  CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/flat.png'))
+                              
+                              ),
                           ListTile(
                               title: Text("Glass Buttons"),
                               leading: Radio(
@@ -374,7 +380,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: Icon(Icons.star)),
+                              trailing:  CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/glass.png'))),
                           ListTile(
                               title: Text("Leather Buttons"),
                               leading: Radio(
@@ -388,7 +396,7 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                 },
                               ),
                               trailing: CircleAvatar(
-                                  // backgroundImage: AssetImage('assets/horse.png')
+                                  backgroundImage: AssetImage('assets/leather.png')
                                   )),
                           ListTile(
                               title: Text("Lapple Buttons"),
@@ -402,7 +410,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: Icon(Icons.star))
+                              trailing:  CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/lapel.png')))
                         ],
                       ),
                     ),
@@ -473,9 +483,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      "https://images.unsplash.com/photo-1547721064-da6cfb341d50"))),
+                              trailing:  CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/daman1.jpg'))),
                           ListTile(
                               title: Text("Straight Daman"),
                               leading: Radio(
@@ -488,7 +498,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: Icon(Icons.star))
+                              trailing:  CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/daman2.jpg')))
                         ],
                       ),
                     ),
@@ -559,7 +571,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: Icon(Icons.star)),
+                              trailing: CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/shalwar1.jpg'))),
                           ListTile(
                               title: Text("Trouser Design"),
                               leading: Radio(
@@ -572,7 +586,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: Icon(Icons.star)),
+                              trailing: CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/shalwar2.jpg'))),
                           ListTile(
                               title: Text("Straight Pant Design"),
                               leading: Radio(
@@ -585,7 +601,9 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                                   });
                                 },
                               ),
-                              trailing: Icon(Icons.star))
+                              trailing: CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/shalwar3.jpg')))
                         ],
                       ),
                     ),

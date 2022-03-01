@@ -83,11 +83,10 @@ class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          dateTimeFormat
-                                              .format(DateTime.parse(snapshot
-                                                  .data.docs[index]['date']))
-                                              .toString(),
+                                        child: Text("Delivery Date" +
+                                          snapshot
+                                                  .data.docs[index]['deliverydate']
+                                              ,
                                           style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w800,
@@ -115,7 +114,7 @@ class _OrderHistoryCompletedState extends State<OrderHistoryCompleted> {
                                         child: Text(
                                           "Total: Rs. " +
                                               snapshot.data.docs[index]
-                                                  ['price'],
+                                                  ['productprice'],
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,

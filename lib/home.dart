@@ -1,4 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/cardCategory.dart';
@@ -22,6 +24,22 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+   Future getUserData() async {
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      var users = await FirebaseFirestore.instance
+          .collection('userinfo')
+          .doc(auth.currentUser.uid)
+          .get();
+      return users;
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
   int selectedCategory = 0;
   List selectedCategoryList = shirts;
   @override
@@ -85,7 +103,7 @@ class _HomeState extends State<Home> {
           //Promo
 
           SizedBox(height: SizeConfig.blockSizeVertical * 4),
-          AnimatedSearchBar(),
+          // AnimatedSearchBar(),
           SizedBox(height: SizeConfig.blockSizeVertical * 4),
           //animated text
           Center(

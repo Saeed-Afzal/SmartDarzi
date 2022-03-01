@@ -8,6 +8,10 @@ import 'package:flutter_ecommerce_app/userpage.dart';
 import 'package:flutter_ecommerce_app/wishlist.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
+
+  NavigationDrawerWidget({
+    Key key,
+  }) : super(key: key);
   @override
   _NavigationDrawerWidgetState createState() => _NavigationDrawerWidgetState();
 }
@@ -43,16 +47,16 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         child: ListView(
           padding: padding,
           children: [
-            buildHeader(
-                urlImage: urlImage,
-                name: name,
-                email: email,
-                onClicked: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => UserPage(
-                          name: name,
-                          email: email,
-                          urlImage: urlImage,
-                        )))),
+            // buildHeader(
+            //     urlImage: urlImage,
+            //     name: name,
+            //     email: email,
+            //     onClicked: () => Navigator.of(context).push(MaterialPageRoute(
+            //         builder: (context) => UserPage(
+            //               name: name,
+            //               email: email,
+            //               urlImage: urlImage,
+            //             )))),
 
             SizedBox(
               height: 20,

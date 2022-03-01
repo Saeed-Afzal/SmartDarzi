@@ -84,25 +84,40 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          dateTimeFormat
-                                              .format(DateTime.parse(snapshot
-                                                  .data.docs[index]['date']))
-                                              .toString(),
+                                        child:  Text("Delivery Date " +
+                                         snapshot.data.docs[index]
+                                                  ['deliverydate'],
+                                         
                                           style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w800,
                                             color: Colors.black,
                                           ),
                                         ),
+                                        
+                                        
+                                        // Text("sd" +
+                                        //   dateTimeFormat
+                                        //       .format(DateTime.parse(snapshot
+                                        //           .data.docs[index]['deliverydate']))
+                                        //       .toString(),
+                                        //   style: TextStyle(
+                                        //     fontSize: 20,
+                                        //     fontWeight: FontWeight.w800,
+                                        //     color: Colors.black,
+                                        //   ),
+                                        // ),
                                       ),
+
+
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: Text(
                                           "Product Name " +
                                               snapshot.data.docs[index]
-                                                  ['productname'],
+                                                  ['productname']
+                                              ,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
@@ -116,7 +131,8 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                                         child: Text(
                                           "Total: Rs. " +
                                               snapshot.data.docs[index]
-                                                  ['price'],
+                                                  ['productprice']
+                                                  ,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
@@ -129,7 +145,7 @@ class _OrderHistoryPendingState extends State<OrderHistoryPending> {
                                   Expanded(
                                     child: Chip(
                                       label: const Text(
-                                        'Completed',
+                                        'Pending',
                                         style: TextStyle(
                                             color: Colors.black87,
                                             fontSize: 14),

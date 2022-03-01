@@ -103,9 +103,9 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
-  var sizee = 'asas';
+  var sizee;
   addUserProductData() async {
-    if (sizeTypeIdFirstDropdown == '1') {
+    if (sizeTypeIdFirstDropdown == '2') {
       if (mySizeValue == '') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
@@ -129,6 +129,16 @@ class _ProductPageState extends State<ProductPage> {
         return;
       }
     }
+          if (deliveryData == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            'Please enter delivery date',
+            style: TextStyle(color: Colors.white),
+          ),
+          duration: Duration(seconds: 2),
+        ));
+        return;
+      }
     setState(() {
       _isLoading = true;
     });
@@ -212,32 +222,32 @@ class _ProductPageState extends State<ProductPage> {
     mySizeValue = '';
   }
 
-  // void _pickImageGallery() async {
-  //   final picker = ImagePicker();
-  //   try {
-  //     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-  //     final pickedImageFile = File(pickedImage.path);
-  //     setState(() {
-  //       pickedImageData = pickedImageFile;
-  //     });
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //       content: Text(
-  //         'Your image is selected',
-  //         style: TextStyle(color: Colors.white),
-  //       ),
-  //       duration: Duration(seconds: 2),
-  //     ));
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //       content: Text(
-  //         '$e',
-  //         style: TextStyle(color: Colors.white),
-  //       ),
-  //       duration: Duration(seconds: 2),
-  //     ));
-  //   }
-  //   // Navigator.pop(context);
-  // }
+  void _pickImageGallery() async {
+    final picker = ImagePicker();
+    try {
+      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+      final pickedImageFile = File(pickedImage.path);
+      setState(() {
+        pickedImageData = pickedImageFile;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Your image is selected',
+          style: TextStyle(color: Colors.white),
+        ),
+        duration: Duration(seconds: 2),
+      ));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          '$e',
+          style: TextStyle(color: Colors.white),
+        ),
+        duration: Duration(seconds: 2),
+      ));
+    }
+    // Navigator.pop(context);
+  }
 
   // void _remove() {
   //   setState(() {
@@ -356,10 +366,10 @@ class _ProductPageState extends State<ProductPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: buildAppBar(),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _pickImageGallery,
-      //   child: Icon(Icons.link_outlined),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _pickImageGallery,
+        child: Icon(Icons.link_outlined),
+      ),
       body: SingleChildScrollView(
         child: Container(
           child: Column(
@@ -778,67 +788,67 @@ class _ProductPageState extends State<ProductPage> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: size.width * 1.0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Align(
-                          alignment: AlignmentDirectional(-0.85, 0),
-                          child: Text(
-                            'Delivery Details',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        // SizedBox(
-                        //   height: 15,
-                        // ),
-                        // OutlinedButton(
-                        //   onPressed: () {
-                        //     debugPrint('Received click');
-                        //   },
-                        //   child: const Text('Click Me'),
-                        // ),
-                        // if (_currentPosition != null)
-                        //   Text(
-                        //       "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
-                        ElevatedButton(
-                          // style: style,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AddressList()),
-                            );
-                            //  _getCurrentLocation();
-                          },
-                          child: const Text('Select Address'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Container(
+              //   width: double.infinity,
+              //   decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.only(),
+              //     boxShadow: [
+              //       BoxShadow(
+              //         color: Colors.grey.withOpacity(0.5),
+              //         spreadRadius: 5,
+              //         blurRadius: 7,
+              //         offset: Offset(0, 3), // changes position of shadow
+              //       ),
+              //     ],
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(8.0),
+              //     child: Container(
+              //       width: size.width * 1.0,
+              //       child: Column(
+              //         mainAxisSize: MainAxisSize.max,
+              //         children: [
+              //           Align(
+              //             alignment: AlignmentDirectional(-0.85, 0),
+              //             child: Text(
+              //               'Delivery Details',
+              //               style: TextStyle(
+              //                 fontSize: 18,
+              //                 fontWeight: FontWeight.w500,
+              //                 color: Colors.blue,
+              //               ),
+              //             ),
+              //           ),
+              //           // SizedBox(
+              //           //   height: 15,
+              //           // ),
+              //           // OutlinedButton(
+              //           //   onPressed: () {
+              //           //     debugPrint('Received click');
+              //           //   },
+              //           //   child: const Text('Click Me'),
+              //           // ),
+              //           // if (_currentPosition != null)
+              //           //   Text(
+              //           //       "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
+              //           ElevatedButton(
+              //             // style: style,
+              //             onPressed: () {
+              //               Navigator.push(
+              //                 context,
+              //                 MaterialPageRoute(
+              //                     builder: (context) => AddressList()),
+              //               );
+              //               //  _getCurrentLocation();
+              //             },
+              //             child: const Text('Select Address'),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
               SizedBox(
                 height: 10,
               ),
@@ -921,7 +931,6 @@ class _ProductPageState extends State<ProductPage> {
                                                   name: widget.productData.name,
                                                   price:
                                                       widget.productData.price,
-                                                      description: widget.productData.des,
                                                 )));
                                   })
                             ],
@@ -935,9 +944,8 @@ class _ProductPageState extends State<ProductPage> {
               SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                height: 10,
-              ),
+              ///new field
+              
               Container(
                 // width: double.infinity,
                 decoration: BoxDecoration(
