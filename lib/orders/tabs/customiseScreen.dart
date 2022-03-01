@@ -254,44 +254,42 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                   ),
                   Container(
                     height: 150,
-                    child: Expanded(
-                      child: ListView(
-                        padding: const EdgeInsets.all(8),
-                        children: [
-                          ListTile(
-                              title: Text("Shirt Collar"),
-                              leading: Radio(
-                                value: CollarCharacter.shirt,
-                                groupValue: _collarcharacter,
-                                onChanged: (value) {
-                                  setState(() {
-                                    collarData = 'Shirt collar';
-                                    _collarcharacter = value;
-                                  });
-                                },
-                              ),
-                              // trailing: CircleAvatar(
-                              //     backgroundImage:
-                              //         AssetImage('assets/shirtt.png'))
-                                      ),
-                          ListTile(
-                              title: Text("Sherwani Collar"),
-                              leading: Radio(
-                                value: CollarCharacter.sherwani,
-                                groupValue: _collarcharacter,
-                                onChanged: (value) {
-                                  setState(() {
-                                    collarData = 'Sherwani collar';
-                                    _collarcharacter = value;
-                                  });
-                                },
-                              ),
-                              // trailing: CircleAvatar(
-                              //     backgroundImage:
-                              //         AssetImage('assets/kurta.png'))
-                                      )
-                        ],
-                      ),
+                    child: ListView(
+                      padding: const EdgeInsets.all(8),
+                      children: [
+                        ListTile(
+                            title: Text("Shirt Collar"),
+                            leading: Radio(
+                              value: CollarCharacter.shirt,
+                              groupValue: _collarcharacter,
+                              onChanged: (value) {
+                                setState(() {
+                                  collarData = 'Shirt collar';
+                                  _collarcharacter = value;
+                                });
+                              },
+                            ),
+                            // trailing: CircleAvatar(
+                            //     backgroundImage:
+                            //         AssetImage('assets/shirtt.png'))
+                                    ),
+                        ListTile(
+                            title: Text("Sherwani Collar"),
+                            leading: Radio(
+                              value: CollarCharacter.sherwani,
+                              groupValue: _collarcharacter,
+                              onChanged: (value) {
+                                setState(() {
+                                  collarData = 'Sherwani collar';
+                                  _collarcharacter = value;
+                                });
+                              },
+                            ),
+                            // trailing: CircleAvatar(
+                            //     backgroundImage:
+                            //         AssetImage('assets/kurta.png'))
+                                    )
+                      ],
                     ),
                   ),
                   Row(
@@ -347,77 +345,75 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                   ),
                   Container(
                     height: 250,
-                    child: Expanded(
-                      child: ListView(
-                        padding: const EdgeInsets.all(8),
-                        children: [
-                          ListTile(
-                              title: Text("Flat / Simple Buttons"),
-                              leading: Radio(
-                                value: ButtonCharacter.flat,
-                                groupValue: _btncharacter,
-                                onChanged: (value) {
-                                  setState(() {
-                                    buttonStyle = 'Flat / Simple button';
-                                    _btncharacter = value;
-                                  });
-                                },
-                              ),
-                              // trailing:  CircleAvatar(
-                              //     backgroundImage:
-                              //         AssetImage('assets/flat.png'))
-                              
-                              ),
-                          ListTile(
-                              title: Text("Glass Buttons"),
-                              leading: Radio(
-                                value: ButtonCharacter.glass,
-                                groupValue: _btncharacter,
-                                onChanged: (value) {
-                                  setState(() {
-                                    buttonStyle = 'Glass button';
-                                    _btncharacter = value;
-                                  });
-                                },
-                              ),
-                              // trailing:  CircleAvatar(
-                              //     backgroundImage:
-                              //         AssetImage('assets/glass.png'))
-                                      ),
-                          ListTile(
-                              title: Text("Leather Buttons"),
-                              leading: Radio(
-                                value: ButtonCharacter.leather,
-                                groupValue: _btncharacter,
-                                onChanged: (value) {
-                                  setState(() {
-                                    buttonStyle = 'Leather Button';
-                                    _btncharacter = value;
-                                  });
-                                },
-                              ),
-                              // trailing: CircleAvatar(
-                              //     backgroundImage: AssetImage('assets/leather.png')
-                              //     )
-                                  ),
-                          ListTile(
-                              title: Text("Lapple Buttons"),
-                              leading: Radio(
-                                value: ButtonCharacter.lapple,
-                                groupValue: _btncharacter,
-                                onChanged: (value) {
-                                  setState(() {
-                                    buttonStyle = 'Lapple Button';
-                                    _btncharacter = value;
-                                  });
-                                },
-                              ),
-                              // trailing:  CircleAvatar(
-                              //     backgroundImage:
-                              //         AssetImage('assets/lapel.png'))
-                                      )
-                        ],
-                      ),
+                    child: ListView(
+                      padding: const EdgeInsets.all(8),
+                      children: [
+                        ListTile(
+                            title: Text("Flat / Simple Buttons"),
+                            leading: Radio(
+                              value: ButtonCharacter.flat,
+                              groupValue: _btncharacter,
+                              onChanged: (value) {
+                                setState(() {
+                                  buttonStyle = 'Flat / Simple button';
+                                  _btncharacter = value;
+                                });
+                              },
+                            ),
+                            // trailing:  CircleAvatar(
+                            //     backgroundImage:
+                            //         AssetImage('assets/flat.png'))
+                            
+                            ),
+                        ListTile(
+                            title: Text("Glass Buttons"),
+                            leading: Radio(
+                              value: ButtonCharacter.glass,
+                              groupValue: _btncharacter,
+                              onChanged: (value) {
+                                setState(() {
+                                  buttonStyle = 'Glass button';
+                                  _btncharacter = value;
+                                });
+                              },
+                            ),
+                            // trailing:  CircleAvatar(
+                            //     backgroundImage:
+                            //         AssetImage('assets/glass.png'))
+                                    ),
+                        ListTile(
+                            title: Text("Leather Buttons"),
+                            leading: Radio(
+                              value: ButtonCharacter.leather,
+                              groupValue: _btncharacter,
+                              onChanged: (value) {
+                                setState(() {
+                                  buttonStyle = 'Leather Button';
+                                  _btncharacter = value;
+                                });
+                              },
+                            ),
+                            // trailing: CircleAvatar(
+                            //     backgroundImage: AssetImage('assets/leather.png')
+                            //     )
+                                ),
+                        ListTile(
+                            title: Text("Lapple Buttons"),
+                            leading: Radio(
+                              value: ButtonCharacter.lapple,
+                              groupValue: _btncharacter,
+                              onChanged: (value) {
+                                setState(() {
+                                  buttonStyle = 'Lapple Button';
+                                  _btncharacter = value;
+                                });
+                              },
+                            ),
+                            // trailing:  CircleAvatar(
+                            //     backgroundImage:
+                            //         AssetImage('assets/lapel.png'))
+                                    )
+                      ],
                     ),
                   ),
                   Row(
@@ -470,44 +466,42 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                   ),
                   Container(
                     height: 150,
-                    child: Expanded(
-                      child: ListView(
-                        padding: const EdgeInsets.all(8),
-                        children: [
-                          ListTile(
-                              title: Text("Rounded Daman"),
-                              leading: Radio(
-                                value: DamanCharacter.round,
-                                groupValue: _damancharacter,
-                                onChanged: (value) {
-                                  setState(() {
-                                    damanDesign = 'Rounded Daman';
-                                    _damancharacter = value;
-                                  });
-                                },
-                              ),
-                              // trailing:  CircleAvatar(
-                              //     backgroundImage:
-                              //         AssetImage('assets/daman1.jpg'))
-                                      ),
-                          ListTile(
-                              title: Text("Straight Daman"),
-                              leading: Radio(
-                                value: DamanCharacter.straight,
-                                groupValue: _damancharacter,
-                                onChanged: (value) {
-                                  setState(() {
-                                    damanDesign = 'Straight Daman';
-                                    _damancharacter = value;
-                                  });
-                                },
-                              ),
-                              // trailing:  CircleAvatar(
-                              //     backgroundImage:
-                              //         AssetImage('assets/daman2.jpg'))
-                                      )
-                        ],
-                      ),
+                    child: ListView(
+                      padding: const EdgeInsets.all(8),
+                      children: [
+                        ListTile(
+                            title: Text("Rounded Daman"),
+                            leading: Radio(
+                              value: DamanCharacter.round,
+                              groupValue: _damancharacter,
+                              onChanged: (value) {
+                                setState(() {
+                                  damanDesign = 'Rounded Daman';
+                                  _damancharacter = value;
+                                });
+                              },
+                            ),
+                            // trailing:  CircleAvatar(
+                            //     backgroundImage:
+                            //         AssetImage('assets/daman1.jpg'))
+                                    ),
+                        ListTile(
+                            title: Text("Straight Daman"),
+                            leading: Radio(
+                              value: DamanCharacter.straight,
+                              groupValue: _damancharacter,
+                              onChanged: (value) {
+                                setState(() {
+                                  damanDesign = 'Straight Daman';
+                                  _damancharacter = value;
+                                });
+                              },
+                            ),
+                            // trailing:  CircleAvatar(
+                            //     backgroundImage:
+                            //         AssetImage('assets/daman2.jpg'))
+                                    )
+                      ],
                     ),
                   ),
                   Row(
@@ -560,60 +554,58 @@ class _CustomiseScreenState extends State<CustomiseScreen> {
                   ),
                   Container(
                     height: 200,
-                    child: Expanded(
-                      child: ListView(
-                        padding: const EdgeInsets.all(8),
-                        children: [
-                          ListTile(
-                              title: Text("Simple Normal Design"),
-                              leading: Radio(
-                                value: shalwarCharacter.simple,
-                                groupValue: _shalwarcharacter,
-                                onChanged: (value) {
-                                  setState(() {
-                                    shalwarDesign = 'Simple Normal Design';
-                                    _shalwarcharacter = value;
-                                  });
-                                },
-                              ),
-                              // trailing: CircleAvatar(
-                              //     backgroundImage:
-                              //         AssetImage('assets/shalwar1.jpg'))
-                                      ),
-                          ListTile(
-                              title: Text("Trouser Design"),
-                              leading: Radio(
-                                value: shalwarCharacter.trouser,
-                                groupValue: _shalwarcharacter,
-                                onChanged: (value) {
-                                  setState(() {
-                                    shalwarDesign = 'Trouser Design';
-                                    _shalwarcharacter = value;
-                                  });
-                                },
-                              ),
-                              // trailing: CircleAvatar(
-                              //     backgroundImage:
-                              //         AssetImage('assets/shalwar2.jpg'))
-                                      ),
-                          ListTile(
-                              title: Text("Straight Pant Design"),
-                              leading: Radio(
-                                value: shalwarCharacter.straight,
-                                groupValue: _shalwarcharacter,
-                                onChanged: (value) {
-                                  setState(() {
-                                    shalwarDesign = 'Straight Pant';
-                                    _shalwarcharacter = value;
-                                  });
-                                },
-                              ),
-                              // trailing: CircleAvatar(
-                              //     backgroundImage:
-                              //         AssetImage('assets/shalwar3.jpg'))
-                                      )
-                        ],
-                      ),
+                    child: ListView(
+                      padding: const EdgeInsets.all(8),
+                      children: [
+                        ListTile(
+                            title: Text("Simple Normal Design"),
+                            leading: Radio(
+                              value: shalwarCharacter.simple,
+                              groupValue: _shalwarcharacter,
+                              onChanged: (value) {
+                                setState(() {
+                                  shalwarDesign = 'Simple Normal Design';
+                                  _shalwarcharacter = value;
+                                });
+                              },
+                            ),
+                            // trailing: CircleAvatar(
+                            //     backgroundImage:
+                            //         AssetImage('assets/shalwar1.jpg'))
+                                    ),
+                        ListTile(
+                            title: Text("Trouser Design"),
+                            leading: Radio(
+                              value: shalwarCharacter.trouser,
+                              groupValue: _shalwarcharacter,
+                              onChanged: (value) {
+                                setState(() {
+                                  shalwarDesign = 'Trouser Design';
+                                  _shalwarcharacter = value;
+                                });
+                              },
+                            ),
+                            // trailing: CircleAvatar(
+                            //     backgroundImage:
+                            //         AssetImage('assets/shalwar2.jpg'))
+                                    ),
+                        ListTile(
+                            title: Text("Straight Pant Design"),
+                            leading: Radio(
+                              value: shalwarCharacter.straight,
+                              groupValue: _shalwarcharacter,
+                              onChanged: (value) {
+                                setState(() {
+                                  shalwarDesign = 'Straight Pant';
+                                  _shalwarcharacter = value;
+                                });
+                              },
+                            ),
+                            trailing: CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/shalwar3.jpg'))
+                                    )
+                      ],
                     ),
                   ),
                   SizedBox(
