@@ -1,12 +1,4 @@
-// 
-
-
-
-
-
-
-
-
+//
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_app/sizechartwithdatabase.dart';
 
 var mySizeValue;
+var mychest;
+var mylength;
+var mybottom;
+var myshoulder;
+var mysleeve;
+var mywaist;
 
 class PlaceProductWidget extends StatefulWidget {
   const PlaceProductWidget({Key key}) : super(key: key);
@@ -28,7 +26,13 @@ class _PlaceProductWidgetState extends State<PlaceProductWidget> {
   @override
   void initState() {
     super.initState();
-    mySizeValue ;
+    mySizeValue;
+    mychest;
+    mylength;
+    mybottom;
+    myshoulder;
+    mysleeve;
+    mywaist;
   }
 
   var v;
@@ -102,6 +106,13 @@ class _PlaceProductWidgetState extends State<PlaceProductWidget> {
                               v = val;
                               mySizeValue =
                                   snapshot.data.docs[val]['size name'];
+                              mychest = snapshot.data.docs[val]['chest'];
+                              mylength = snapshot.data.docs[val]['length'];
+                              mybottom = snapshot.data.docs[val]['bottom'];
+                              myshoulder = snapshot.data.docs[val]['shoulder'];
+                              mysleeve = snapshot.data.docs[val]['sleeve'];
+                              mywaist = snapshot.data.docs[val]['waist'];
+
                             });
                           },
                         );

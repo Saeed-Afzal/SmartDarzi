@@ -38,6 +38,7 @@ class _ProductPageState extends State<ProductPage> {
   var userCus = null;
   var fabricData = 'I have fabric';
   var deliveryData;
+  var username;
   final comments = TextEditingController();
 
   List<Widget> buildPageIndicator() {
@@ -103,7 +104,32 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
-  var sizee;
+
+  
+
+
+  Future getUserData() async {
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      var users = await FirebaseFirestore.instance
+          .collection('userinfo')
+          .doc(auth.currentUser.uid)
+          .get();
+      // print();
+      return users;
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+
+
+  var sizee ;
+
   addUserProductData() async {
     if (sizeTypeIdFirstDropdown == '2') {
       if (mySizeValue == '') {
@@ -143,10 +169,13 @@ class _ProductPageState extends State<ProductPage> {
       _isLoading = true;
     });
     try {
+      
       var sizeData = await firestoreInstance
           .collection('user data')
           .doc(auth.currentUser.uid)
           .collection('Size Chart Data')
+          // .doc()
+          // .get();
           .where("size name", isEqualTo: sizee)
           .snapshots();
       var customizeData =
@@ -174,6 +203,7 @@ class _ProductPageState extends State<ProductPage> {
           'productname': widget.productData.name,
           'productprice': widget.productData.price,
           'productimage': widget.productData.images,
+          
           // ...sizeData.data(),
           'status': 'pending',
           'deliverydate': deliveryData,
@@ -183,6 +213,15 @@ class _ProductPageState extends State<ProductPage> {
               : '',
           'sizename': mySizeValue,
           'uploadimage': imageUrl,
+          'chest': mychest,
+          'length': mylength,
+          'bottom': mybottom,
+          'shoulder': myshoulder,
+          'sleeve': mysleeve,
+          'waist': mywaist,
+          // 'username': widget.,
+
+        
         });
       } else {
         firestoreInstance
@@ -204,9 +243,19 @@ class _ProductPageState extends State<ProductPage> {
               ? sizes[int.parse(sizeIdOfSecondDropown) - 1]['Label']
               : '',
           'sizename': mySizeValue,
+          'chest': mychest,
+           'length': mylength,
+          'bottom': mybottom,
+          'shoulder': myshoulder,
+          'sleeve': mysleeve,
+          'waist': mywaist,
+          // 'username': auth.currentUser.name,
+
         });
       }
       print(customizeData.data());
+      print(mySizeValue);
+      
       Navigator.of(context).pop();
       Navigator.of(context).pop();
     } catch (e) {
@@ -220,6 +269,14 @@ class _ProductPageState extends State<ProductPage> {
     // addressController.dispose();
     comments.dispose();
     mySizeValue = '';
+    mychest = '';
+    mylength = '';
+    mybottom = '';
+    myshoulder = '';
+    mysleeve = '';
+    mywaist = '';
+
+
   }
 
   void _pickImageGallery() async {

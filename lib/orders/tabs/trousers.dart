@@ -117,13 +117,17 @@ class _TrousersState extends State<Trousers> {
                                                 FadeTransition(
                                                     opacity: animation,
                                                     child:
-                                                    DetailsScreen(
-                                                      productData: ProductData(images: List<String>.from(_productsData[index]['image'])),
-                                                      onProductAdd: () {
-                                                        controller.addProductToCart(
-                                                            demo_products[index]);
-                                                      },
-                                                    ),
+                                                    ProductPage(
+                                                  productData: ProductData(
+                                                      name: _productsData[index]
+                                                          ['name'],
+                                                      price:
+                                                          _productsData[index]
+                                                              ['price'],
+                                                      images: List<String>.from(
+                                                          _productsData[index]
+                                                              ['image'])),
+                                                ),
                                                     ),
                                           ),
                                         );
@@ -132,34 +136,34 @@ class _TrousersState extends State<Trousers> {
                                   ),
                                 ),
                               ),
-                              AnimatedPositioned(
-                                duration: panelTransition,
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                height: controller.homeState == HomeState.normal
-                                    ? cartBarHeight
-                                    : (constraints.maxHeight - cartBarHeight),
-                                child: GestureDetector(
-                                  onVerticalDragUpdate: _onVerticalGesture,
-                                  child: Container(
-                                    padding:
-                                        const EdgeInsets.all(defaultPadding),
-                                    color: Color(0xFFEAEAEA),
-                                    alignment: Alignment.topLeft,
-                                    child: AnimatedSwitcher(
-                                      duration: panelTransition,
-                                      child:
-                                          // controller.homeState ==
-                                          //         HomeState.normal
-                                          CardShortView(controller: controller)
-                                      // : CartDetailsView(
-                                      //     controller: controller)
-                                      ,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // AnimatedPositioned(
+                              //   duration: panelTransition,
+                              //   bottom: 0,
+                              //   left: 0,
+                              //   right: 0,
+                              //   height: controller.homeState == HomeState.normal
+                              //       ? cartBarHeight
+                              //       : (constraints.maxHeight - cartBarHeight),
+                              //   child: GestureDetector(
+                              //     onVerticalDragUpdate: _onVerticalGesture,
+                              //     child: Container(
+                              //       padding:
+                              //           const EdgeInsets.all(defaultPadding),
+                              //       color: Color(0xFFEAEAEA),
+                              //       alignment: Alignment.topLeft,
+                              //       child: AnimatedSwitcher(
+                              //         duration: panelTransition,
+                              //         child:
+                              //             // controller.homeState ==
+                              //             //         HomeState.normal
+                              //             CardShortView(controller: controller)
+                              //         // : CartDetailsView(
+                              //         //     controller: controller)
+                              //         ,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                               // AnimatedPositioned(
                               //   duration: panelTransition,
                               //   top: controller.homeState == HomeState.normal
