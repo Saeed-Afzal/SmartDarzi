@@ -249,6 +249,7 @@ class _ProductPageState extends State<ProductPage> {
           'shoulder': myshoulder,
           'sleeve': mysleeve,
           'waist': mywaist,
+          'uploadimage': imageUrl,
           // 'username': auth.currentUser.name,
 
         });
